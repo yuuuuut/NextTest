@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+    next:
+        build: ./docker/
+        volumes:
+            - ./app:/usr/src/app
+        command: "yarn dev"
+        ports:
+            - "4001:3000"
