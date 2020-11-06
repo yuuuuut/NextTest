@@ -1,17 +1,28 @@
 import { useContext } from 'react'
 
+import firebase        from 'firebase/app'
 import { AuthContext } from '../contexts/auth'
 import { User }        from '../models/User'
+
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
+
+const uiConfig = {
+    signInFlow: 'popup',
+    signInSuccessUrl: "/",
+    signInOptions: [
+        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+    ],
+}
+
 
 type HomeContextType = {
     user: User
     load: boolean
-    signup: () => Promise<void>
     signout: () => Promise<void>
 }
 
 export const Home = () => {
-    const { user, load, signup, signout }: HomeContextType = useContext(AuthContext)
+    const { user, load, signout }: HomeContextType = useContext(AuthContext)
 
     return (
         <div>
@@ -26,7 +37,12 @@ export const Home = () => {
                             <button onClick={signout}>Logout</button>
                         </h1>
                     ) : (
-                        <button onClick={signup}>Login</button>
+                        <div>
+                            <StyledFirebaseAuth
+                                uiConfig={uiConfig}
+                                firebaseAuth={firebase.auth()}
+                            />
+                        </div>
                     )}
                 </div>
             )}
