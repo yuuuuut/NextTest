@@ -1,8 +1,14 @@
+import React from 'react'
+
+import { AuthProvider } from '../contexts/auth'
+
 import '../lib/firebase'
 
 const MyApp = ({ Component, pageProps }) => {
     return (
-        <Component {...pageProps} />
+        <AuthProvider>
+            <Component {...pageProps} />
+        </AuthProvider>
     )
 }
 

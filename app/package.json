@@ -30,7 +30,8 @@
     "next": "latest",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-firebaseui": "^4.1.0"
+    "react-firebaseui": "^4.1.0",
+    "recoil": "^0.1.2"
   },
   "devDependencies": {
     "@testing-library/react": "^10.0.1",

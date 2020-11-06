@@ -1,39 +1,32 @@
-/* eslint-disable no-console */
-import firebase from 'firebase/app'
-import { useState} from 'react'
+import { useContext } from 'react'
 
-type User = {
-    uid: string
-    name: string
+import { AuthContext } from '../contexts/auth'
+import { User }        from '../models/User'
+
+type HomeContextType = {
+    user: User
+    load: boolean
+    signup: () => Promise<void>
 }
 
 export const Home = () => {
-    const [user, setUser] = useState<User>()
-
-    const login = () => {
-        const provider = new firebase.auth.GoogleAuthProvider()
-
-        firebase.auth().signInWithPopup(provider)
-            .then((user) => {
-                console.log(user.user)
-                const u = user.user
-                setUser({
-                    uid: u.uid,
-                    name: u.displayName,
-                })
-            }).catch((error) => {
-                console.error(error)
-            })
-    }
+    const { user, load, signup }: HomeContextType = useContext(AuthContext)
 
     return (
         <div>
-            {user ? (
-                <h1 className="t-color">
-                    Login{user.name}
-                </h1>
+            {load ? (
+                <div>Loading...</div>
             ) : (
-                <button onClick={login}>Login</button>
+                <div>
+                    {user ? (
+                        <h1 className="t-color">
+                            Login{user.displayName}
+                            <img src={user.photoURL} />
+                        </h1>
+                    ) : (
+                        <button onClick={signup}>Login</button>
+                    )}
+                </div>
             )}
 
             <style jsx>{`
