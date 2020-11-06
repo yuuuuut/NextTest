@@ -12,12 +12,14 @@ type AuthContextType = {
     user: User
     load: boolean
     signup: () => Promise<void>
+    signout: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType>({
     user: null,
     load: false,
     signup: null,
+    signout: null,
 })
 
 const AuthProvider = ({ children }) => {
@@ -33,6 +35,10 @@ const AuthProvider = ({ children }) => {
             }).catch((error) => {
                 console.error(error)
             })
+    }, [])
+
+    const signout = useCallback(async () => {
+        await firebase.auth().signOut()
     }, [])
 
     useEffect(() => {
@@ -54,7 +60,7 @@ const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider
-            value={{ load, user, signup }}
+            value={{ load, user, signup, signout }}
         >
             {children}
         </AuthContext.Provider>
