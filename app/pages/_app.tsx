@@ -1,14 +1,27 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
-import { AuthProvider } from '../contexts/auth'
+import { ThemeProvider } from '@material-ui/core'
+import { AuthProvider }  from '../contexts/auth'
+import theme from '../components/theme'
 
 import '../lib/firebase'
 
 const MyApp = ({ Component, pageProps }) => {
+
+    useEffect(() => {
+        const jssStyles = document.querySelector('#jss-server-side');
+
+        if (jssStyles) {
+            jssStyles.parentElement.removeChild(jssStyles);
+        }
+    }, [])
+
     return (
-        <AuthProvider>
-            <Component {...pageProps} />
-        </AuthProvider>
+        <ThemeProvider theme={theme}>
+            <AuthProvider>
+                <Component {...pageProps} />
+            </AuthProvider>
+        </ThemeProvider>
     )
 }
 

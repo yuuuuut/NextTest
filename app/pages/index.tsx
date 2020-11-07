@@ -5,6 +5,7 @@ import { AuthContext } from '../contexts/auth'
 import { User }        from '../models/User'
 
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
+import { Layout } from '../components/Layout'
 
 const uiConfig = {
     signInFlow: 'popup',
@@ -13,7 +14,6 @@ const uiConfig = {
         firebase.auth.GoogleAuthProvider.PROVIDER_ID,
     ],
 }
-
 
 type HomeContextType = {
     user: User
@@ -26,6 +26,7 @@ export const Home = () => {
 
     return (
         <div>
+            <Layout>
             {load ? (
                 <div>Loading...</div>
             ) : (
@@ -46,6 +47,13 @@ export const Home = () => {
                     )}
                 </div>
             )}
+            </Layout>
+
+            <style jsx global>{`
+                body {
+                    margin: 0px;
+                }
+            `}</style>
 
             <style jsx>{`
                 .t-color {
