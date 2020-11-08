@@ -37,7 +37,10 @@ const AuthProvider = ({ children }) => {
                     displayName: result.displayName,
                     photoURL: result.photoURL,
                 })
-                setLoad(false)
+
+                setTimeout(() => {
+                    setLoad(false)
+                }, 500)
             } else {
                 setUser(null)
                 setLoad(false)

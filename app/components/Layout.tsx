@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
 import {
     AppBar,
@@ -6,12 +6,9 @@ import {
     Typography,
 } from '@material-ui/core'
 
-import { AuthContext } from '../contexts/auth';
 import { HeaderMenu }  from './HeaderMenu';
 
 export const Layout = ({ children }) => {
-    const { user } = useContext(AuthContext)
-
     return (
         <div >
             <AppBar position="static">
@@ -19,9 +16,7 @@ export const Layout = ({ children }) => {
                     <Typography variant="h6">
                         Photos
                     </Typography>
-                    {user && (
-                        <HeaderMenu user={user} />
-                    )}
+                    <HeaderMenu />
                 </Toolbar>
             </AppBar>
             <div>{children}</div>

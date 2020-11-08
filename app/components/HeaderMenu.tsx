@@ -13,13 +13,16 @@ import {
 } from "@material-ui/core"
 
 import {
+    Skeleton
+} from '@material-ui/lab';
+
+import {
     AccountCircle,
     ExitToApp }
 from "@material-ui/icons";
 
 import { useContext, useState } from "react";
 import { AuthContext } from "../contexts/auth";
-import { User } from "../models/User";
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -50,11 +53,7 @@ const StyledMenu = withStyles({
     />
 ))
 
-type Props = {
-    user: User
-}
-
-export const HeaderMenu: React.FC<Props> = ({ user }) => {
+export const HeaderMenu = () => {
     const classes = useStyles()
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -69,40 +68,52 @@ export const HeaderMenu: React.FC<Props> = ({ user }) => {
     };
 
     // React
-    const { signout } = useContext(AuthContext)
+    const { user, load, signout } = useContext(AuthContext)
 
     return (
         <div className={classes.toolbarButtons}>
-            <IconButton
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit"
-            >
-                <Avatar src={user.photoURL} alt="User Image" />
-            </IconButton>
-            <StyledMenu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                keepMounted
-                open={open}
-                onClose={handleClose}
-            >
-                <MenuItem onClick={handleClose}>
-                    <ListItemIcon>
-                        <AccountCircle fontSize="default" />
-                    </ListItemIcon>
-                    <ListItemText primary="マイページ" />
-                </MenuItem>
-                <Divider />
-                <MenuItem onClick={signout}>
-                    <ListItemIcon>
-                        <ExitToApp fontSize="default" />
-                    </ListItemIcon>
-                    <ListItemText primary="ログアウト" />
-                </MenuItem>
-            </StyledMenu>
+            {user ? (
+                <div>
+                    <IconButton
+                        aria-label="account of current user"
+                        aria-controls="menu-appbar"
+                        aria-haspopup="true"
+                        onClick={handleMenu}
+                        color="inherit"
+                    >
+                        {load ? (
+                            <Avatar>
+                                <Skeleton variant="circle" width={40} height={40} />
+                            </Avatar>
+                        ) : (
+                            <Avatar src={user.photoURL} alt="User Image" />
+                        )}
+                    </IconButton>
+                    <StyledMenu
+                        id="menu-appbar"
+                        anchorEl={anchorEl}
+                        keepMounted
+                        open={open}
+                        onClose={handleClose}
+                    >
+                        <MenuItem onClick={handleClose}>
+                            <ListItemIcon>
+                                <AccountCircle fontSize="default" />
+                            </ListItemIcon>
+                            <ListItemText primary="マイページ" />
+                        </MenuItem>
+                        <Divider />
+                        <MenuItem onClick={signout}>
+                            <ListItemIcon>
+                                <ExitToApp fontSize="default" />
+                            </ListItemIcon>
+                            <ListItemText primary="ログアウト" />
+                        </MenuItem>
+                    </StyledMenu>
+                </div>
+            ) : (
+                <div></div>
+            )}
         </div>
     )
 }
