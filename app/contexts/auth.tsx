@@ -7,6 +7,7 @@ import React, {
 
 import firebase from 'firebase/app'
 import { User } from '../models/User'
+import { toast } from "react-toastify";
 
 type AuthContextType = {
     user: User
@@ -26,6 +27,18 @@ const AuthProvider = ({ children }) => {
 
     const signout = useCallback(async () => {
         await firebase.auth().signOut()
+            .then(() => {
+                toast.success('🌝 ログアウトしました 🌝', {
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                })
+            }).catch((e) => {
+                console.error(e)
+            })
     }, [])
 
     useEffect(() => {

@@ -6,7 +6,10 @@ import {
     Typography,
 } from '@material-ui/core'
 
-import { HeaderMenu }  from './HeaderMenu';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import { HeaderMenu } from './HeaderMenu';
 
 export const Layout = ({ children }) => {
     return (
@@ -20,6 +23,7 @@ export const Layout = ({ children }) => {
                 </Toolbar>
             </AppBar>
             <div>{children}</div>
+            <ToastContainer />
         </div>
     );
 }
