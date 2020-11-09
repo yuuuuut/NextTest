@@ -41,12 +41,6 @@ export const Home = () => {
             )}
             </Layout>
 
-            <style jsx global>{`
-                body {
-                    margin: 0px;
-                }
-            `}</style>
-
             <style jsx>{`
                 .t-color {
                     color: red;

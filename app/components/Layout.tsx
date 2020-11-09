@@ -24,6 +24,13 @@ export const Layout = ({ children }) => {
             </AppBar>
             <div>{children}</div>
             <ToastContainer />
+
+            <style jsx global>{`
+                body {
+                    margin: 0px;
+                }
+            `}</style>
         </div>
+
     );
 }

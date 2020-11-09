@@ -1,8 +1,10 @@
 import { useEffect, useState }  from 'react'
 import { useRouter } from 'next/router'
-import firebase from 'firebase/app'
+import Error from 'next/error'
 
+import firebase from 'firebase/app'
 import { User } from '../../models/User'
+import { Layout } from '../../components/Layout'
 
 type Query = {
     uid: string
@@ -10,6 +12,7 @@ type Query = {
 
 const UserShow = () => {
     const [user, setUser] = useState<User>(null)
+    const [load, setLoad] = useState(true)
 
     const router = useRouter()
     const query  = router.query as Query
@@ -27,17 +30,35 @@ const UserShow = () => {
                 .get()
 
             if (!doc.exists) {
+                setLoad(false)
                 return
             }
 
             const gotUser = doc.data() as User
             gotUser.uid = doc.id
             setUser(gotUser)
+            setLoad(false)
         }
         getUser()
     }, [query.uid])
 
-    return <div>{user ? user.displayName : 'load...'}</div>
+    return (
+        <div>
+            <Layout>
+                {load ? (
+                    <div>Loading...</div>
+                ) : (
+                    <div>
+                        {user ? (
+                            <div>{user.displayName}</div>
+                        ) : (
+                            <Error statusCode={404} />
+                        )}
+                    </div>
+                )}
+            </Layout>
+        </div>
+    )
 }
 
 export default UserShow
