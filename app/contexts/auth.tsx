@@ -5,8 +5,8 @@ import React, {
     useState
 } from "react";
 
-import firebase from 'firebase/app'
-import { User } from '../models/User'
+import firebase  from 'firebase/app'
+import { User }  from '../models/User'
 import { toast } from "react-toastify";
 
 type AuthContextType = {
@@ -20,6 +20,21 @@ const AuthContext = createContext<AuthContextType>({
     load: false,
     signout: null,
 })
+
+async function createUser(user: User) {
+    const userRef = firebase.firestore().collection('users').doc(user.uid)
+    const doc = await userRef.get()
+
+    if (doc.exists) {
+        return
+    }
+
+    await userRef.set({
+        uid: user.uid,
+        displayName: user.displayName,
+        photoURL: user.photoURL,
+    })
+}
 
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState<User | null>(null)
@@ -42,18 +57,24 @@ const AuthProvider = ({ children }) => {
     }, [])
 
     useEffect(() => {
-        firebase.auth().onAuthStateChanged((result) => {
+        if (user !== null) {
+            return
+        }
+
+        firebase.auth().onAuthStateChanged(function (result) {
             if (result) {
                 setLoad(true)
-                setUser({
+
+                const loginUser: User = {
                     uid: result.uid,
                     displayName: result.displayName,
                     photoURL: result.photoURL,
-                })
+                }
 
-                setTimeout(() => {
-                    setLoad(false)
-                }, 500)
+                setUser(loginUser)
+                createUser(loginUser)
+
+                setLoad(false)
             } else {
                 setUser(null)
                 setLoad(false)
