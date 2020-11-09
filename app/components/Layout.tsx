@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 
 import {
     AppBar,
@@ -13,11 +14,13 @@ import { HeaderMenu } from './HeaderMenu';
 
 export const Layout = ({ children }) => {
     return (
-        <div >
+        <div>
             <AppBar position="static">
                 <Toolbar>
                     <Typography variant="h6">
-                        Photos
+                        <Link href="/">
+                            Photos
+                        </Link>
                     </Typography>
                     <HeaderMenu />
                 </Toolbar>
@@ -28,6 +31,14 @@ export const Layout = ({ children }) => {
             <style jsx global>{`
                 body {
                     margin: 0px;
+                }
+
+                a {
+                    text-decoration: none;
+                }
+
+                a:link, a:visited, a:active {
+                    color: white;
                 }
             `}</style>
         </div>

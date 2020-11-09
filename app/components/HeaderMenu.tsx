@@ -1,3 +1,6 @@
+import React, { useContext, useState } from "react";
+import Link from "next/link"
+
 import {
     Avatar,
     createStyles,
@@ -8,6 +11,7 @@ import {
     makeStyles,
     Menu,
     MenuItem,
+    MenuItemProps,
     MenuProps,
     withStyles
 } from "@material-ui/core"
@@ -21,9 +25,11 @@ import {
     ExitToApp }
 from "@material-ui/icons";
 
-import { useContext, useState } from "react";
 import { AuthContext } from "../contexts/auth";
 
+/**
+ * Styles
+ */
 const useStyles = makeStyles(() =>
     createStyles({
         toolbarButtons: {
@@ -52,6 +58,24 @@ const StyledMenu = withStyles({
         {...props}
     />
 ))
+
+type LinkMenuItemProps = Omit<MenuItemProps<'a', { href: string }>, 'component' | 'button'>
+
+const LinkMenuItem = React.forwardRef<HTMLAnchorElement, LinkMenuItemProps>(
+    function LinkMenuItem(props, forwardedRef) {
+
+        const {
+            href,
+            ...other
+        } = props
+
+        return (
+            <Link href={href}>
+                <MenuItem component='a' button ref={forwardedRef} {...other}/>
+            </Link>
+        )
+    }
+)
 
 export const HeaderMenu = () => {
     const classes = useStyles()
@@ -96,12 +120,12 @@ export const HeaderMenu = () => {
                         open={open}
                         onClose={handleClose}
                     >
-                        <MenuItem onClick={handleClose}>
-                            <ListItemIcon>
-                                <AccountCircle fontSize="default" />
-                            </ListItemIcon>
-                            <ListItemText primary="マイページ" />
-                        </MenuItem>
+                        <LinkMenuItem href={`/users/${user.uid}`}>
+                                <ListItemIcon>
+                                    <AccountCircle fontSize="default" />
+                                </ListItemIcon>
+                                <ListItemText primary="マイページ" />
+                        </LinkMenuItem>
                         <Divider />
                         <MenuItem onClick={signout}>
                             <ListItemIcon>
