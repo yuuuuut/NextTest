@@ -1,14 +1,13 @@
 import { useContext } from 'react'
 
-import firebase        from 'firebase/app'
-import { AuthContext } from '../contexts/auth'
-
+import firebase from 'firebase/app'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
+
 import { Layout } from '../components/Layout'
+import { AuthContext } from '../contexts/auth'
 
 const uiConfig = {
     signInFlow: 'popup',
-    signInSuccessUrl: "/",
     signInOptions: [
         firebase.auth.GoogleAuthProvider.PROVIDER_ID,
     ],

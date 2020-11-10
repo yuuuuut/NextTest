@@ -44,6 +44,7 @@ const AuthProvider = ({ children }) => {
         await firebase.auth().signOut()
             .then(() => {
                 toast.success('🌝 ログアウトしました 🌝', {
+                    position: 'bottom-left',
                     autoClose: 5000,
                     hideProgressBar: false,
                     closeOnClick: true,

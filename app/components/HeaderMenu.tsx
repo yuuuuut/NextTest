@@ -59,8 +59,14 @@ const StyledMenu = withStyles({
     />
 ))
 
+/**
+ * Types
+ */
 type LinkMenuItemProps = Omit<MenuItemProps<'a', { href: string }>, 'component' | 'button'>
 
+/**
+ * Functions
+ */
 const LinkMenuItem = React.forwardRef<HTMLAnchorElement, LinkMenuItemProps>(
     function LinkMenuItem(props, forwardedRef) {
 
@@ -81,25 +87,32 @@ export const HeaderMenu = () => {
     const classes = useStyles()
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-    const open = Boolean(anchorEl);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [open, setOpen] = useState(false)
 
     const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
+        setOpen(true)
         setAnchorEl(event.currentTarget);
     };
 
     const handleClose = () => {
+        setOpen(false)
         setAnchorEl(null);
     };
 
     // React
     const { user, load, signout } = useContext(AuthContext)
 
+    const c = () => {
+        signout()
+        setAnchorEl(null)
+    }
+
     return (
         <div className={classes.toolbarButtons}>
             {user ? (
                 <div>
                     <IconButton
-                        aria-label="account of current user"
                         aria-controls="menu-appbar"
                         aria-haspopup="true"
                         onClick={handleMenu}
@@ -116,8 +129,7 @@ export const HeaderMenu = () => {
                     <StyledMenu
                         id="menu-appbar"
                         anchorEl={anchorEl}
-                        keepMounted
-                        open={open}
+                        open={Boolean(anchorEl)}
                         onClose={handleClose}
                     >
                         <LinkMenuItem href={`/users/${user.uid}`}>
@@ -127,7 +139,7 @@ export const HeaderMenu = () => {
                                 <ListItemText primary="マイページ" />
                         </LinkMenuItem>
                         <Divider />
-                        <MenuItem onClick={signout}>
+                        <MenuItem onClick={c}>
                             <ListItemIcon>
                                 <ExitToApp fontSize="default" />
                             </ListItemIcon>
