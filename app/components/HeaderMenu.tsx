@@ -21,7 +21,7 @@ const useStyles = makeStyles(() =>
     createStyles({
         toolbarButtons: {
             marginLeft: 'auto',
-            marginRight: '40px'
+            marginRight: '20px'
         }
     }),
 );

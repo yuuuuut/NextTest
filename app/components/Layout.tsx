@@ -3,9 +3,12 @@ import Link from 'next/link';
 
 import {
     AppBar,
+    Button,
     Toolbar,
     Typography,
 } from '@material-ui/core'
+
+import AddBoxIcon from '@material-ui/icons/AddBox';
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -23,6 +26,15 @@ export const Layout = ({ children }) => {
                         </Link>
                     </Typography>
                     <HeaderMenu />
+                    <Link href="/posts/create">
+                        <Button
+                            variant="contained"
+                            color="secondary"
+                            endIcon={<AddBoxIcon />}
+                        >
+                            投稿
+                        </Button>
+                    </Link>
                 </Toolbar>
             </AppBar>
             <div>{children}</div>
