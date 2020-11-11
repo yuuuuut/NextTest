@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
 type AvatarKitProps = {
     src: string
     class?: "large" | "small"
+    onClick?: () => void
 }
 
 export const AvatarKit = (props: AvatarKitProps) => {

@@ -2,35 +2,18 @@ import { useEffect, useState }  from 'react'
 import { useRouter } from 'next/router'
 import Error from 'next/error'
 
-import {
-    Grid,
-    makeStyles
-} from '@material-ui/core'
-
-import {
-    Skeleton
-} from '@material-ui/lab'
-
 import firebase from 'firebase/app'
 import { User } from '../../models/User'
 import { Layout } from '../../components/Layout'
-import { AvatarKit } from '../../components/UI/Avatar'
-
-const useStyles = makeStyles((theme) => ({
-    mt: {
-        marginTop: theme.spacing(4)
-    },
-}));
+import { UserShowHeader } from '../../components/users/UserShowHeader'
 
 type Query = {
     uid: string
 }
 
 const UserShow = () => {
-    const classes = useStyles();
-
-    const [user, setUser] = useState<User>(null)
-    const [load, setLoad] = useState(true)
+    const [user, setUser]   = useState<User>(null)
+    const [load, setLoad]   = useState(true)
     const [error, setError] = useState(false)
 
     const router = useRouter()
@@ -64,24 +47,11 @@ const UserShow = () => {
     return (
         <div>
             <Layout>
-                <div>
-                    {error ? (
-                        <Error statusCode={404} />
-                    ) : (
-                        <Grid container alignItems="center" justify="center">
-                            <Grid item className={classes.mt}>
-                                {load ? (
-                                    <Skeleton variant="circle"  width={96} height={96} />
-                                ) : (
-                                    <AvatarKit
-                                        src={user.photoURL}
-                                        class={"large"}
-                                    />
-                                )}
-                            </Grid>
-                        </Grid>
-                    )}
-                </div>
+                {error ? (
+                    <Error statusCode={404} />
+                ) : (
+                    <UserShowHeader user={user} load={load} />
+                )}
             </Layout>
         </div>
     )
