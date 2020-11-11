@@ -12,11 +12,15 @@ const useStyles = makeStyles((theme) => ({
         width: theme.spacing(12),
         height: theme.spacing(12),
     },
+    big: {
+        width: theme.spacing(30),
+        height: theme.spacing(30),
+    }
 }));
 
 type AvatarKitProps = {
     src: string
-    class?: "large" | "small"
+    class?: "big" | "large" | "small"
     onClick?: () => void
 }
 
@@ -25,7 +29,9 @@ export const AvatarKit = (props: AvatarKitProps) => {
 
     return (
         <>
-            {props.class === "large" ? (
+            {props.class === 'big' ? (
+                <Avatar alt="User Image" src={props.src} className={classes.big} />
+            ) : props.class === "large" ? (
                 <Avatar alt="User Image" src={props.src} className={classes.large} />
             ) : props.class === "small" ? (
                 <Avatar alt="User Image" src={props.src} className={classes.small} />

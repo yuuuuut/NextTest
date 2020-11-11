@@ -1,7 +1,4 @@
-import { useState }  from 'react'
-
 import {
-    Backdrop,
     Grid,
     makeStyles,
     Typography,
@@ -11,7 +8,8 @@ import {
     Skeleton
 } from '@material-ui/lab'
 
-import { AvatarKit } from '../../components/UI/Avatar'
+import { User } from '../../models/User';
+import { UserShowHeaderImage } from './UserShowHeaderImage';
 
 const useStyles = makeStyles((theme) => ({
     mt2: {
@@ -19,51 +17,36 @@ const useStyles = makeStyles((theme) => ({
     },
     mt4: {
         marginTop: theme.spacing(4)
-    },
-    backdrop: {
-        zIndex: theme.zIndex.drawer + 1,
-        color: '#fff',
-    },
+    }
 }));
 
-export const UserShowHeader = (props) => {
+type UserShowHeaderProps = {
+    user: User
+    load: boolean
+}
+
+export const UserShowHeader = (props: UserShowHeaderProps) => {
     const classes = useStyles();
-    const [open, setOpen] = useState(false)
 
-    const handleClose = () => {
-        setOpen(false)
-    }
-
-    const handleToggle = () => {
-        setOpen(!open)
-    }
+    const user = props.user
+    const load = props.load
 
     return (
         <>
             <Grid container alignItems="center" justify="center">
                 <Grid item className={classes.mt4}>
-                    {props.load ? (
+                    {load ? (
                         <Skeleton variant="circle"  width={96} height={96} />
                     ) : (
-                        <>
-                        <div onClick={handleToggle}>
-                        <AvatarKit
-                            src={props.user.photoURL}
-                            class={"large"}
-                        />
-                        </div>
-                        <Backdrop className={classes.backdrop} open={open} onClick={handleClose}>
-                            <img src={props.user.photoURL} />
-                        </Backdrop>
-                        </>
+                        <UserShowHeaderImage user={user} />
                     )}
                 </Grid>
             </Grid>
             <Grid container alignItems="center" justify="center">
                 <Grid item className={classes.mt2}>
-                <Typography variant="h3">
-                    {props.load ? <Skeleton /> : props.user.displayName}
-                </Typography>
+                    <Typography variant="h3">
+                        {load ? <Skeleton /> : user.displayName}
+                    </Typography>
                 </Grid>
             </Grid>
         </>
