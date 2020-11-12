@@ -5,6 +5,9 @@ import {
     makeStyles,
 } from "@material-ui/core"
 
+import DeleteIcon from '@material-ui/icons/Delete';
+
+/** Styles */
 const useStyles = makeStyles(() => ({
     root: {
         width: '50%',
@@ -15,15 +18,16 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
+/** Types */
 type PostFormImagePreviewProps = {
     path: string
 }
 
+/** Main */
 export const PostFormImagePreview = (props: PostFormImagePreviewProps) => {
     const classes = useStyles();
 
     return (
-        <>
         <Card className={classes.root}>
             <CardMedia
                 className={classes.media}
@@ -31,9 +35,8 @@ export const PostFormImagePreview = (props: PostFormImagePreviewProps) => {
                 title="Paella dish"
             />
             <CardActions>
-                削除
+                <DeleteIcon color="secondary" />
             </CardActions>
         </Card>
-    </>
     )
 }

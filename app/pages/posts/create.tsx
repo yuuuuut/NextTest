@@ -1,4 +1,5 @@
 import { FormEvent, useState } from "react"
+
 import {
     Button,
     LinearProgress,
@@ -6,17 +7,31 @@ import {
     TextField
 } from "@material-ui/core"
 
+import { PostFormImage } from "../../components/posts/PostFormImage"
 import { Layout } from "../../components/Layout"
 import { toast } from "react-toastify"
 import firebase from 'firebase/app'
-import { PostFormImage } from "../../components/posts/PostFormImage"
 
+/** Styles */
 const useStyles = makeStyles(() => ({
     progress: {
         width: '100%'
+    },
+    container: {
+        margin: '0 auto',
+        marginTop: '20px',
+        maxWidth: '400px',
+        padding: '1rem',
+        height: 'auto',
+        width: 'calc(100% - 2rem)',
+    },
+    containerM: {
+        marginTop: '10px',
+        marginBottom: '10px',
     }
 }))
 
+/** Main */
 const Create = () => {
     const classes = useStyles();
 
@@ -55,7 +70,7 @@ const Create = () => {
 
     return (
         <Layout>
-            <div className="container">
+            <div className={classes.container}>
                 <form onSubmit={onSubmit}>
                     <TextField
                         fullWidth={true}
@@ -66,7 +81,7 @@ const Create = () => {
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
                     />
-                    <div className="container-m">
+                    <div className={classes.containerM}>
                         <TextField
                             fullWidth={true}
                             id="outlined-multiline-static"
@@ -79,7 +94,7 @@ const Create = () => {
                         />
                     </div>
                     <PostFormImage images={images} setImages={setImages} />
-                    <div className="container-m">
+                    <div className={classes.containerM}>
                         {isSending ? (
                             <div className={classes.progress}>
                                 <LinearProgress />

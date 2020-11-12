@@ -1,15 +1,46 @@
 import { useCallback } from "react"
 
+import {
+    Chip,
+    createStyles,
+    makeStyles }
+from "@material-ui/core"
+
+import {
+    PhotoCamera
+} from "@material-ui/icons"
+
 import { PostFormImagePreview } from "./PostFormImagePreview"
 import { Image } from "../../models/Post"
 import firebase from 'firebase/app'
 
+/** Styles */
+const useStyles = makeStyles(() =>
+    createStyles({
+        imageList: {
+            display: 'flex',
+            flexWrap: 'wrap',
+            width: '100%',
+        },
+        mt: {
+            marginTop: '8px',
+        },
+        input: {
+            display: 'none',
+        }
+    })
+);
+
+/** Types */
 type PostFormImageProps = {
     images: Array<Image>
     setImages: Function
 }
 
+/** Main */
 export const PostFormImage = (props: PostFormImageProps) => {
+    const classes = useStyles()
+
     const upload = useCallback((e) => {
         const file = e.target.files
 
@@ -38,29 +69,36 @@ export const PostFormImage = (props: PostFormImageProps) => {
 
     return (
         <div>
-            <div className="image-list">
+            <div className={classes.imageList}>
                 {props.images.length > 0 && (
                     props.images.map(image =>
-                        <PostFormImagePreview path={image.path} key={image.id} />
+                        <PostFormImagePreview
+                            path={image.path}
+                            key={image.id}
+                        />
                     )
                 )}
             </div>
-            <label>
-                <div>画像を登録</div>
-                <input
-                    type="file"
-                    id="image"
-                    onChange={((e) => upload(e))}
-                />
-            </label>
 
-            <style jsx>{`
-                .image-list {
-                    display: flex;
-                    flexWrap: wrap;
-                    width: 100%;
-                }
-            `}</style>
+            {props.images.length < 4 && (
+                <div>
+                    <input
+                        accept="image/*"
+                        className={classes.input}
+                        id="icon-button-file"
+                        type="file"
+                        onChange={(e) => upload(e)}
+                    />
+                    <label htmlFor="icon-button-file">
+                        <Chip
+                            className={classes.mt}
+                            icon={<PhotoCamera />}
+                            label="画像を追加"
+                            variant="outlined"
+                        />
+                    </label>
+                </div>
+            )}
         </div>
     )
 }
