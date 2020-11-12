@@ -9,6 +9,7 @@ import {
 import { Layout } from "../../components/Layout"
 import { toast } from "react-toastify"
 import firebase from 'firebase/app'
+import { PostFormImage } from "../../components/posts/PostFormImage"
 
 const useStyles = makeStyles(() => ({
     progress: {
@@ -21,6 +22,7 @@ const Create = () => {
 
     const [title, setTitle] = useState('')
     const [body, setBody] = useState('')
+    const [images, setImages] = useState([])
     const [isSending, setIsSending] = useState(false)
 
     async function onSubmit(e: FormEvent<HTMLFormElement>) {
@@ -76,6 +78,7 @@ const Create = () => {
                             onChange={(e) => setBody(e.target.value)}
                         />
                     </div>
+                    <PostFormImage images={images} setImages={setImages} />
                     <div className="container-mt">
                         {isSending ? (
                             <div className={classes.progress}>
