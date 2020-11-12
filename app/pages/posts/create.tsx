@@ -66,7 +66,7 @@ const Create = () => {
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
                     />
-                    <div className="container-mt">
+                    <div className="container-m">
                         <TextField
                             fullWidth={true}
                             id="outlined-multiline-static"
@@ -79,7 +79,7 @@ const Create = () => {
                         />
                     </div>
                     <PostFormImage images={images} setImages={setImages} />
-                    <div className="container-mt">
+                    <div className="container-m">
                         {isSending ? (
                             <div className={classes.progress}>
                                 <LinearProgress />
@@ -108,8 +108,9 @@ const Create = () => {
                     width: calc(100% - 2rem);
                 }
 
-                .container-mt {
+                .container-m {
                     margin-top: 10px;
+                    margin-bottom: 10px;
                 }
             `}</style>
         </Layout>

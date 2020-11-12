@@ -10,7 +10,6 @@ type PostFormImageProps = {
 }
 
 export const PostFormImage = (props: PostFormImageProps) => {
-
     const upload = useCallback((e) => {
         const file = e.target.files
 
@@ -32,16 +31,18 @@ export const PostFormImage = (props: PostFormImageProps) => {
                     }
                     props.setImages(((prevState: Array<Image>) => [...prevState, newImage]))
                 })
-        }).catch((e) => {
-            console.log(e)
+        }).catch(() => {
+            alert('エラーが発生しました。')
         })
     }, [props.setImages])
 
     return (
         <div>
-            <div>
+            <div className="image-list">
                 {props.images.length > 0 && (
-                    props.images.map(image => <PostFormImagePreview path={image.path} key={image.id} />)
+                    props.images.map(image =>
+                        <PostFormImagePreview path={image.path} key={image.id} />
+                    )
                 )}
             </div>
             <label>
@@ -52,7 +53,14 @@ export const PostFormImage = (props: PostFormImageProps) => {
                     onChange={((e) => upload(e))}
                 />
             </label>
-            
+
+            <style jsx>{`
+                .image-list {
+                    display: flex;
+                    flexWrap: wrap;
+                    width: 100%;
+                }
+            `}</style>
         </div>
     )
 }

@@ -1,37 +1,39 @@
+import { 
+    Card,
+    CardActions,
+    CardMedia,
+    makeStyles,
+} from "@material-ui/core"
+
+const useStyles = makeStyles(() => ({
+    root: {
+        width: '50%',
+    },
+    media: {
+        height: 0,
+        paddingTop: '80%',
+    },
+}));
+
 type PostFormImagePreviewProps = {
     path: string
 }
 
 export const PostFormImagePreview = (props: PostFormImagePreviewProps) => {
+    const classes = useStyles();
+
     return (
-        <div>
-            <div className="image">
-                <img src={props.path} alt="Post Image" />
-            </div>
-
-            <style jsx>{`
-            .image {
-                position: relative;
-                overflow: hidden;
-                width: 50%
-            }
-
-            .image::before {
-                content: "";
-                display: block;
-                padding-top: 50%;
-            }
-
-            .image > img {
-                position: absolute;
-                object-fit: cover;
-                object-position: center;
-                top: 0;
-                left: 0;
-                width: 50%;
-                height: auto;
-            }
-            `}</style>
-        </div>
+        <>
+        <Card className={classes.root}>
+            <CardMedia
+                className={classes.media}
+                image={props.path}
+                title="Paella dish"
+            />
+            <CardActions>
+                削除
+            </CardActions>
+        </Card>
+    </>
     )
 }
