@@ -1,36 +1,98 @@
-import { Button, TextField } from "@material-ui/core"
+import { FormEvent, useState } from "react"
+import {
+    Button,
+    LinearProgress,
+    makeStyles,
+    TextField
+} from "@material-ui/core"
+
 import { Layout } from "../../components/Layout"
+import { toast } from "react-toastify"
+import firebase from 'firebase/app'
+
+const useStyles = makeStyles(() => ({
+    progress: {
+        width: '100%'
+    }
+}))
 
 const Create = () => {
+    const classes = useStyles();
+
+    const [title, setTitle] = useState('')
+    const [body, setBody] = useState('')
+    const [isSending, setIsSending] = useState(false)
+
+    async function onSubmit(e: FormEvent<HTMLFormElement>) {
+        e.preventDefault()
+
+        setIsSending(true)
+
+        await firebase.firestore().collection('posts').add({
+            userId: firebase.auth().currentUser.uid,
+            title,
+            body,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        })
+
+        setIsSending(false)
+
+        toast.success('投稿しました。', {
+            position: 'bottom-left',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        })
+
+        setTitle('')
+        setBody('')
+    }
+
     return (
         <Layout>
             <div className="container">
-                <TextField
-                    fullWidth={true}
-                    id="outlined-multiline-flexible"
-                    label="タイトル"
-                    multiline
-                    variant="outlined"
-                />
-                <div className="container-mt">
+                <form onSubmit={onSubmit}>
                     <TextField
                         fullWidth={true}
-                        id="outlined-multiline-static"
-                        label="本文"
+                        id="outlined-multiline-flexible"
+                        label="タイトル"
                         multiline
-                        rows={5}
                         variant="outlined"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
                     />
-                </div>
-                <div className="container-mt">
-                    <Button
-                        fullWidth={true}
-                        variant="outlined"
-                        color="primary"
-                    >
-                        投稿
-                    </Button>
-                </div>
+                    <div className="container-mt">
+                        <TextField
+                            fullWidth={true}
+                            id="outlined-multiline-static"
+                            label="本文"
+                            multiline
+                            rows={5}
+                            variant="outlined"
+                            value={body}
+                            onChange={(e) => setBody(e.target.value)}
+                        />
+                    </div>
+                    <div className="container-mt">
+                        {isSending ? (
+                            <div className={classes.progress}>
+                                <LinearProgress />
+                            </div>
+                        ) : (
+                            <Button
+                            type="submit"
+                            fullWidth={true}
+                            variant="outlined"
+                            color="primary"
+                            >
+                                投稿
+                            </Button>
+                        )}
+                    </div>
+                </form>
             </div>
 
             <style jsx>{`
