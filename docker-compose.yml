@@ -4,7 +4,8 @@ services:
     next:
         build: ./docker/
         volumes:
-            - ./app:/usr/src/app
+            - ./app:/usr/src/app:delegated
+            - ./app/node_modules
         command: "yarn dev"
         ports:
             - "4001:3000"
