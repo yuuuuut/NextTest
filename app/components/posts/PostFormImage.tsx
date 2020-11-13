@@ -67,14 +67,24 @@ export const PostFormImage = (props: PostFormImageProps) => {
         })
     }, [props.setImages])
 
+    const deleteImage = useCallback(async (id: string) => {
+        const newImages = props.images.filter(image => image.id !== id)
+
+        props.setImages(newImages)
+
+        return firebase.storage().ref('images').child(id).delete()
+    }, [props.images])
+
     return (
         <div>
             <div className={classes.imageList}>
                 {props.images.length > 0 && (
                     props.images.map(image =>
                         <PostFormImagePreview
+                            id={image.id}
                             path={image.path}
                             key={image.id}
+                            delete={deleteImage}
                         />
                     )
                 )}

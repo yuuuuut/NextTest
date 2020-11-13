@@ -20,7 +20,9 @@ const useStyles = makeStyles(() => ({
 
 /** Types */
 type PostFormImagePreviewProps = {
+    id: string
     path: string
+    delete: (id: string) => void
 }
 
 /** Main */
@@ -35,7 +37,10 @@ export const PostFormImagePreview = (props: PostFormImagePreviewProps) => {
                 title="Paella dish"
             />
             <CardActions>
-                <DeleteIcon color="secondary" />
+                <DeleteIcon
+                    color="secondary"
+                    onClick={() => props.delete(props.id)}
+                />
             </CardActions>
         </Card>
     )
