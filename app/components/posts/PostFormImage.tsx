@@ -35,6 +35,8 @@ const useStyles = makeStyles(() =>
 type PostFormImageProps = {
     images: Array<Image>
     setImages: Function
+    previewImages: any
+    setPreviewImages: Function
 }
 
 /** Main */
@@ -42,44 +44,47 @@ export const PostFormImage = (props: PostFormImageProps) => {
     const classes = useStyles()
 
     const upload = useCallback((e) => {
-        const file = e.target.files
+        const files = e.target.files.item(0)
 
+        const file = e.target.files
         const blob = new Blob(file, { type: "image/jpeg" })
 
         const S = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         const N = 16
         const fileName = Array.from(crypto.getRandomValues(new Uint32Array(N))).map((n) => S[ n % S.length]).join('')
 
-        const uploadRef = firebase.storage().ref('images').child(fileName)
-        const uploadTask = uploadRef.put(blob)
+        const reader = new FileReader()
+        reader.readAsDataURL(files)
+        reader.onload = () => {
+            const previewImage = {
+                id: fileName,
+                path: reader.result,
+                blob: blob,
+            }
 
-        uploadTask.then(() => {
-            uploadTask.snapshot.ref.getDownloadURL()
-                .then((url: string) => {
-                    const newImage = {
-                        id: fileName,
-                        path: url,
-                    }
-                    props.setImages(((prevState: Array<Image>) => [...prevState, newImage]))
-                })
-        }).catch(() => {
-            alert('エラーが発生しました。')
-        })
-    }, [props.setImages])
+            /*
+            const newImage = {
+                id: fileName,
+            }
+            */
 
-    const deleteImage = useCallback(async (id: string) => {
-        const newImages = props.images.filter(image => image.id !== id)
+            //props.setImages(((prevState: Array<Image>) => [...prevState, newImage]))
+            props.setPreviewImages(((prevState: Array<Image>) => [...prevState, previewImage]))
+        }
+    }, [props.previewImages, props.setPreviewImages])
 
-        props.setImages(newImages)
+    const deleteImage = useCallback((id: string) => {
+        const newImages = props.previewImages.filter(image => image.id !== id)
 
-        return firebase.storage().ref('images').child(id).delete()
-    }, [props.images])
+        props.setPreviewImages(newImages)
+        //props.setImages(newImages)
+    }, [props.previewImages])
 
     return (
         <div>
             <div className={classes.imageList}>
-                {props.images.length > 0 && (
-                    props.images.map(image =>
+                {props.previewImages.length > 0 && (
+                    props.previewImages.map(image =>
                         <PostFormImagePreview
                             id={image.id}
                             path={image.path}

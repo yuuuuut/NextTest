@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react"
+import { FormEvent, useEffect, useState } from "react"
 
 import {
     Button,
@@ -38,7 +38,31 @@ const Create = () => {
     const [title, setTitle] = useState('')
     const [body, setBody] = useState('')
     const [images, setImages] = useState([])
+    const [previewImages, setPreviewImages] = useState([])
     const [isSending, setIsSending] = useState(false)
+
+    function upload(e) {
+        e.preventDefault()
+
+        previewImages.map(image => {
+            const uploadRef  = firebase.storage().ref('images').child(image.id)
+            const uploadTask = uploadRef.put(image.blob)
+
+            uploadTask.then(() => {
+                uploadTask.snapshot.ref.getDownloadURL()
+                    .then((url: string) => {
+                        const n = {
+                            id: image.id,
+                            path: url,
+                        }
+
+                        setImages(((prevState) => [...prevState, n]))
+                    })
+            }).catch(() => {
+                alert('エラーが発生しました。')
+            })
+        })
+    }
 
     async function onSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault()
@@ -48,6 +72,7 @@ const Create = () => {
         await firebase.firestore().collection('posts').add({
             userId: firebase.auth().currentUser.uid,
             title,
+            images: images,
             body,
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         })
@@ -63,10 +88,14 @@ const Create = () => {
             draggable: true,
             progress: undefined,
         })
-
-        setTitle('')
-        setBody('')
+        
+        setPreviewImages([])
+        setImages([])
     }
+
+    useEffect(() => {
+        console.log(images)
+    }, [images, setImages])
 
     return (
         <Layout>
@@ -93,7 +122,12 @@ const Create = () => {
                             onChange={(e) => setBody(e.target.value)}
                         />
                     </div>
-                    <PostFormImage images={images} setImages={setImages} />
+                    <PostFormImage
+                        images={images}
+                        setImages={setImages}
+                        previewImages={previewImages}
+                        setPreviewImages={setPreviewImages}
+                    />
                     <div className={classes.containerM}>
                         {isSending ? (
                             <div className={classes.progress}>
@@ -109,6 +143,16 @@ const Create = () => {
                                 投稿
                             </Button>
                         )}
+
+                            <Button
+                                onClick={upload}
+                                type="submit"
+                                fullWidth={true}
+                                variant="outlined"
+                                color="primary"
+                            >
+                                アップロード
+                            </Button>
                     </div>
                 </form>
             </div>
