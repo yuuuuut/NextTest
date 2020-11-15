@@ -43,23 +43,28 @@ export const PostFormImage = (props: PostFormImageProps) => {
     const upload = useCallback((e) => {
         const files: Blob = e.target.files.item(0)
 
+        //Blob作成
         const file = e.target.files
         const blob = new Blob(file, { type: "image/jpeg" })
 
+        //fileName作成
         const S = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         const N = 16
         const fileName = Array.from(crypto.getRandomValues(new Uint32Array(N))).map((n) => S[ n % S.length]).join('')
 
-        const reader = new FileReader()
-        reader.readAsDataURL(files)
-        reader.onload = () => {
-            const previewImage = {
-                id: fileName,
-                path: reader.result,
-                blob: blob,
+        if (files) {
+            const reader = new FileReader()
+        
+            reader.onload = () => {
+                const previewImage = {
+                    id: fileName,
+                    path: reader.result,
+                    blob: blob,
+                }
+    
+                props.setPreviewImages(((prevState: Array<PreviewImage>) => [...prevState, previewImage]))
             }
-
-            props.setPreviewImages(((prevState: Array<PreviewImage>) => [...prevState, previewImage]))
+            reader.readAsDataURL(files)
         }
     }, [props.previewImages])
 

@@ -30,18 +30,20 @@ export const PostFormImagePreview = (props: PostFormImagePreviewProps) => {
     const classes = useStyles();
 
     return (
-        <Card className={classes.root}>
-            <CardMedia
-                className={classes.media}
-                image={props.path}
-                title="Paella dish"
-            />
-            <CardActions>
-                <DeleteIcon
-                    color="secondary"
-                    onClick={() => props.delete(props.id)}
+        <>
+            <Card className={classes.root}>
+                <CardMedia
+                    className={classes.media}
+                    image={props.path}
+                    title="Paella dish"
                 />
-            </CardActions>
-        </Card>
+                <CardActions>
+                    <DeleteIcon
+                        color="secondary"
+                        onClick={() => props.delete(props.id)}
+                    />
+                </CardActions>
+            </Card>
+        </>
     )
 }
