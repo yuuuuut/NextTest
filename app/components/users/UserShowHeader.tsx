@@ -8,9 +8,10 @@ import {
     Skeleton
 } from '@material-ui/lab'
 
-import { User } from '../../models/User';
 import { UserShowHeaderImage } from './UserShowHeaderImage';
+import { User } from '../../models/User';
 
+/** Styles */
 const useStyles = makeStyles((theme) => ({
     mt2: {
         marginTop: theme.spacing(2)
@@ -20,11 +21,13 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+/** Types */
 type UserShowHeaderProps = {
     user: User
     load: boolean
 }
 
+/** Main */
 export const UserShowHeader = (props: UserShowHeaderProps) => {
     const classes = useStyles();
 

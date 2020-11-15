@@ -11,12 +11,10 @@ import {
 } from '@material-ui/lab';
 
 import { AuthContext } from "../contexts/auth";
-import { MenuKit } from "./UI/Menu";
 import { AvatarKit } from "./UI/Avatar";
+import { MenuKit } from "./UI/Menu";
 
-/**
- * Styles
- */
+/** Styles */
 const useStyles = makeStyles(() =>
     createStyles({
         toolbarButtons: {
@@ -26,10 +24,12 @@ const useStyles = makeStyles(() =>
     }),
 );
 
+/** Main */
 export const HeaderMenu = () => {
     const classes = useStyles()
 
     const { user, load, signout } = useContext(AuthContext)
+    
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
     const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -41,7 +41,7 @@ export const HeaderMenu = () => {
     };
 
     const handleLogout = () => {
-        signout()
+        signout && signout()
         setAnchorEl(null)
     }
 

@@ -7,6 +7,7 @@ import {
     TextField
 } from "@material-ui/core"
 
+import { Image, PreviewImage } from "../../models/Post"
 import { PostFormImage } from "../../components/posts/PostFormImage"
 import { Layout } from "../../components/Layout"
 import { toast } from "react-toastify"
@@ -37,20 +38,20 @@ const Create = () => {
 
     const [title, setTitle] = useState('')
     const [body, setBody] = useState('')
-    const [previewImages, setPreviewImages] = useState([])
+    const [previewImages, setPreviewImages] = useState<Array<PreviewImage>>([])
     const [isSending, setIsSending] = useState(false)
 
     const upload = async () => {
         setIsSending(true)
 
-        const images = []
+        const images: Array<Image> = []
 
         await Promise.all(previewImages.map(async image => {
             const uploadRef  = firebase.storage().ref('images').child(image.id)
             const uploadTask = uploadRef.put(image.blob)
 
-            const snapshot = await uploadTask
-            const url      = await snapshot.ref.getDownloadURL()
+            const snapshot    = await uploadTask
+            const url: string = await snapshot.ref.getDownloadURL()
 
             const newImage = {
                 id: image.id,
@@ -60,7 +61,7 @@ const Create = () => {
         }))
 
         await firebase.firestore().collection('posts').add({
-            userId: firebase.auth().currentUser.uid,
+            userId: firebase.auth().currentUser?.uid,
             title,
             images: images,
             body,
@@ -116,14 +117,14 @@ const Create = () => {
                                 <LinearProgress />
                             </div>
                         ) : (
-                        <Button
-                            onClick={upload}
-                            fullWidth={true}
-                            variant="outlined"
-                            color="primary"
-                        >
-                            投稿
-                        </Button>
+                            <Button
+                                onClick={upload}
+                                fullWidth={true}
+                                variant="outlined"
+                                color="primary"
+                            >
+                                投稿
+                            </Button>
                         )}
                     </div>
                 </form>

@@ -21,7 +21,7 @@ const useStyles = makeStyles(() => ({
 /** Types */
 type PostFormImagePreviewProps = {
     id: string
-    path: string
+    path: string | undefined
     delete: (id: string) => void
 }
 

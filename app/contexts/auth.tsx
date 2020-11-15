@@ -6,19 +6,19 @@ import React, {
 } from "react";
 
 import firebase  from 'firebase/app'
-import { User }  from '../models/User'
 import { toast } from "react-toastify";
+import { User }  from '../models/User'
 
 type AuthContextType = {
-    user: User
+    user: User | null
     load: boolean
     signout: () => Promise<void>
 }
 
-const AuthContext = createContext<AuthContextType>({
+const AuthContext = createContext<Partial<AuthContextType>>({
     user: null,
     load: false,
-    signout: null,
+    signout: undefined,
 })
 
 async function createUser(user: User) {
@@ -36,14 +36,14 @@ async function createUser(user: User) {
     })
 }
 
-const AuthProvider = ({ children }) => {
+const AuthProvider: React.FC = ({ children }) => {
     const [user, setUser] = useState<User | null>(null)
     const [load, setLoad] = useState(true)
 
     const signout = useCallback(async () => {
         await firebase.auth().signOut()
             .then(() => {
-                toast.success('🌝 ログアウトしました 🌝', {
+                toast.success('ログアウトしました。', {
                     position: 'bottom-left',
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -66,10 +66,12 @@ const AuthProvider = ({ children }) => {
             if (result) {
                 setLoad(true)
 
+                const url = result.photoURL as string | undefined
+
                 const loginUser: User = {
                     uid: result.uid,
                     displayName: result.displayName,
-                    photoURL: result.photoURL,
+                    photoURL: url,
                 }
 
                 setUser(loginUser)

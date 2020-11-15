@@ -15,7 +15,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { HeaderMenu } from './HeaderMenu';
 
-export const Layout = ({ children }) => {
+/** Main */
+export const Layout: React.FC = ({ children }) => {
     return (
         <div>
             <AppBar position="static">

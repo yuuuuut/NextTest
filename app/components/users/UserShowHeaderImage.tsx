@@ -1,12 +1,14 @@
 import { useState } from "react"
+
 import {
     Backdrop,
     makeStyles
 } from "@material-ui/core"
 
-import { User } from "../../models/User";
 import { AvatarKit } from "../UI/Avatar"
+import { User } from "../../models/User";
 
+/** Styles */
 const useStyles = makeStyles((theme) => ({
     backdrop: {
         zIndex: theme.zIndex.drawer + 1,
@@ -14,10 +16,12 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+/** Types */
 type UserShowHeaderImageProps = {
     user: User
 }
 
+/** Main */
 export const UserShowHeaderImage = (props: UserShowHeaderImageProps) => {
     const classes = useStyles();
 
@@ -41,7 +45,10 @@ export const UserShowHeaderImage = (props: UserShowHeaderImageProps) => {
                 />
             </div>
             <Backdrop className={classes.backdrop} open={open} onClick={handleClose}>
-                <AvatarKit src={user.photoURL} class={'big'} />
+                <AvatarKit
+                    src={user.photoURL}
+                    class={'big'}
+                />
             </Backdrop>
         </>
     )

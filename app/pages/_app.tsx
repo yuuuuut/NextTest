@@ -6,13 +6,13 @@ import theme from '../components/theme'
 
 import '../lib/firebase'
 
-const MyApp = ({ Component, pageProps }) => {
+const MyApp = ({ Component, pageProps }: any) => {
 
     useEffect(() => {
         const jssStyles = document.querySelector('#jss-server-side');
 
         if (jssStyles) {
-            jssStyles.parentElement.removeChild(jssStyles);
+            jssStyles.parentElement?.removeChild(jssStyles);
         }
     }, [])
 

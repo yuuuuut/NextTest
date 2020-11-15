@@ -3,6 +3,7 @@ import {
     makeStyles
 } from "@material-ui/core";
 
+/** Styles */
 const useStyles = makeStyles((theme) => ({
     small: {
         width: theme.spacing(3),
@@ -18,8 +19,9 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+/** Types */
 type AvatarKitProps = {
-    src: string
+    src: string | undefined
     class?: "big" | "large" | "small"
     onClick?: () => void
 }

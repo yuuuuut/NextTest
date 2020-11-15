@@ -11,7 +11,7 @@ import {
 } from "@material-ui/icons"
 
 import { PostFormImagePreview } from "./PostFormImagePreview"
-import { Image } from "../../models/Post"
+import { PreviewImage } from "../../models/Post"
 
 /** Styles */
 const useStyles = makeStyles(() =>
@@ -32,7 +32,7 @@ const useStyles = makeStyles(() =>
 
 /** Types */
 type PostFormImageProps = {
-    previewImages: any
+    previewImages: Array<PreviewImage>
     setPreviewImages: Function
 }
 
@@ -41,7 +41,7 @@ export const PostFormImage = (props: PostFormImageProps) => {
     const classes = useStyles()
 
     const upload = useCallback((e) => {
-        const files = e.target.files.item(0)
+        const files: Blob = e.target.files.item(0)
 
         const file = e.target.files
         const blob = new Blob(file, { type: "image/jpeg" })
@@ -59,9 +59,9 @@ export const PostFormImage = (props: PostFormImageProps) => {
                 blob: blob,
             }
 
-            props.setPreviewImages(((prevState: Array<Image>) => [...prevState, previewImage]))
+            props.setPreviewImages(((prevState: Array<PreviewImage>) => [...prevState, previewImage]))
         }
-    }, [props.previewImages, props.setPreviewImages])
+    }, [props.previewImages])
 
     const deleteImage = useCallback((id: string) => {
         const newImages = props.previewImages.filter(image => image.id !== id)

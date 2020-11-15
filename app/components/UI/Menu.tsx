@@ -17,6 +17,7 @@ import {
     ExitToApp
 } from "@material-ui/icons"
 
+/** Styles */
 const StyledMenu = withStyles({
     paper: {
         border: '1px solid #d3d3d3'
@@ -37,6 +38,7 @@ const StyledMenu = withStyles({
     />
 ))
 
+/** Functions */
 const LinkMenuItem = React.forwardRef<HTMLAnchorElement, LinkMenuItemProps>(
     function LinkMenuItem(props, forwardedRef) {
 
@@ -53,6 +55,7 @@ const LinkMenuItem = React.forwardRef<HTMLAnchorElement, LinkMenuItemProps>(
     }
 )
 
+/** Types */
 type LinkMenuItemProps = Omit<MenuItemProps<'a', { href: string }>, 'component' | 'button'>
 
 type MenuKitProps = {
@@ -62,6 +65,7 @@ type MenuKitProps = {
     handleLogout: () => void
 }
 
+/** Main */
 export const MenuKit = (props: MenuKitProps) => {
     return (
         <StyledMenu

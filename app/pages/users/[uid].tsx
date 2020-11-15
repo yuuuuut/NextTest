@@ -1,18 +1,24 @@
-import { useEffect, useState }  from 'react'
+import {
+    useEffect,
+    useState
+} from 'react'
+
 import { useRouter } from 'next/router'
 import Error from 'next/error'
 
-import firebase from 'firebase/app'
-import { User } from '../../models/User'
-import { Layout } from '../../components/Layout'
 import { UserShowHeader } from '../../components/users/UserShowHeader'
+import { Layout } from '../../components/Layout'
+import { User } from '../../models/User'
+import firebase from 'firebase/app'
 
+/** Types */
 type Query = {
     uid: string
 }
 
+/** Main */
 const UserShow = () => {
-    const [user, setUser]   = useState<User>(null)
+    const [user, setUser]   = useState<User | null>(null)
     const [load, setLoad]   = useState(true)
     const [error, setError] = useState(false)
 
@@ -38,6 +44,7 @@ const UserShow = () => {
 
             const gotUser = doc.data() as User
             gotUser.uid = doc.id
+
             setUser(gotUser)
             setLoad(false)
         }
@@ -50,7 +57,11 @@ const UserShow = () => {
                 {error ? (
                     <Error statusCode={404} />
                 ) : (
-                    <UserShowHeader user={user} load={load} />
+                    <div>
+                        {user && (
+                            <UserShowHeader user={user} load={load} />
+                        )}
+                    </div>
                 )}
             </Layout>
         </div>
