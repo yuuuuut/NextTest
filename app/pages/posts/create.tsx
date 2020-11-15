@@ -37,45 +37,37 @@ const Create = () => {
 
     const [title, setTitle] = useState('')
     const [body, setBody] = useState('')
-    const [images, setImages] = useState([])
     const [previewImages, setPreviewImages] = useState([])
     const [isSending, setIsSending] = useState(false)
 
     const upload = async () => {
         setIsSending(true)
 
-        const u = []
+        const images = []
 
         await Promise.all(previewImages.map(async image => {
             const uploadRef  = firebase.storage().ref('images').child(image.id)
             const uploadTask = uploadRef.put(image.blob)
 
-            await uploadTask.then(async () => {
-                await uploadTask.snapshot.ref.getDownloadURL()
-                    .then(async (url: string) => {
-                        const n = {
-                            id: image.id,
-                            path: url,
-                        }
+            const snapshot = await uploadTask
+            const url      = await snapshot.ref.getDownloadURL()
 
-                        u.push(n)
-                    })
-            }).catch(() => {
-                alert('エラーが発生しました。')
-            })
+            const newImage = {
+                id: image.id,
+                path: url
+            }
+            images.push(newImage)
         }))
 
         await firebase.firestore().collection('posts').add({
             userId: firebase.auth().currentUser.uid,
             title,
-            images: u,
+            images: images,
             body,
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         })
 
         setPreviewImages([])
-        setImages([])
-
         setIsSending(false)
 
         toast.success('投稿しました。', {
@@ -115,8 +107,6 @@ const Create = () => {
                         />
                     </div>
                     <PostFormImage
-                        images={images}
-                        setImages={setImages}
                         previewImages={previewImages}
                         setPreviewImages={setPreviewImages}
                     />

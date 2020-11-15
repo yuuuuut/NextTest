@@ -12,7 +12,6 @@ import {
 
 import { PostFormImagePreview } from "./PostFormImagePreview"
 import { Image } from "../../models/Post"
-import firebase from 'firebase/app'
 
 /** Styles */
 const useStyles = makeStyles(() =>
@@ -33,11 +32,8 @@ const useStyles = makeStyles(() =>
 
 /** Types */
 type PostFormImageProps = {
-    images: Array<Image>
-    setImages: Function
     previewImages: any
     setPreviewImages: Function
-    u: any
 }
 
 /** Main */
@@ -88,9 +84,7 @@ export const PostFormImage = (props: PostFormImageProps) => {
                 )}
             </div>
 
-            <button onClick={props.u}>a</button>
-
-            {props.images.length < 4 && (
+            {props.previewImages.length < 4 && (
                 <div>
                     <input
                         accept="image/*"
