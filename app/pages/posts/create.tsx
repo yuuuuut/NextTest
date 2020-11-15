@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from "react"
+import { useState } from "react"
 
 import {
     Button,
@@ -41,41 +41,40 @@ const Create = () => {
     const [previewImages, setPreviewImages] = useState([])
     const [isSending, setIsSending] = useState(false)
 
-    function upload(e) {
-        e.preventDefault()
+    const upload = async () => {
+        setIsSending(true)
 
-        previewImages.map(image => {
+        const u = []
+
+        await Promise.all(previewImages.map(async image => {
             const uploadRef  = firebase.storage().ref('images').child(image.id)
             const uploadTask = uploadRef.put(image.blob)
 
-            uploadTask.then(() => {
-                uploadTask.snapshot.ref.getDownloadURL()
-                    .then((url: string) => {
+            await uploadTask.then(async () => {
+                await uploadTask.snapshot.ref.getDownloadURL()
+                    .then(async (url: string) => {
                         const n = {
                             id: image.id,
                             path: url,
                         }
 
-                        setImages(((prevState) => [...prevState, n]))
+                        u.push(n)
                     })
             }).catch(() => {
                 alert('エラーが発生しました。')
             })
-        })
-    }
-
-    async function onSubmit(e: FormEvent<HTMLFormElement>) {
-        e.preventDefault()
-
-        setIsSending(true)
+        }))
 
         await firebase.firestore().collection('posts').add({
             userId: firebase.auth().currentUser.uid,
             title,
-            images: images,
+            images: u,
             body,
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         })
+
+        setPreviewImages([])
+        setImages([])
 
         setIsSending(false)
 
@@ -88,19 +87,12 @@ const Create = () => {
             draggable: true,
             progress: undefined,
         })
-        
-        setPreviewImages([])
-        setImages([])
     }
-
-    useEffect(() => {
-        console.log(images)
-    }, [images, setImages])
 
     return (
         <Layout>
             <div className={classes.container}>
-                <form onSubmit={onSubmit}>
+                <form>
                     <TextField
                         fullWidth={true}
                         id="outlined-multiline-flexible"
@@ -134,25 +126,15 @@ const Create = () => {
                                 <LinearProgress />
                             </div>
                         ) : (
-                            <Button
-                            type="submit"
+                        <Button
+                            onClick={upload}
                             fullWidth={true}
                             variant="outlined"
                             color="primary"
-                            >
-                                投稿
-                            </Button>
+                        >
+                            投稿
+                        </Button>
                         )}
-
-                            <Button
-                                onClick={upload}
-                                type="submit"
-                                fullWidth={true}
-                                variant="outlined"
-                                color="primary"
-                            >
-                                アップロード
-                            </Button>
                     </div>
                 </form>
             </div>

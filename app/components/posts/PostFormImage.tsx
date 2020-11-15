@@ -37,6 +37,7 @@ type PostFormImageProps = {
     setImages: Function
     previewImages: any
     setPreviewImages: Function
+    u: any
 }
 
 /** Main */
@@ -62,13 +63,6 @@ export const PostFormImage = (props: PostFormImageProps) => {
                 blob: blob,
             }
 
-            /*
-            const newImage = {
-                id: fileName,
-            }
-            */
-
-            //props.setImages(((prevState: Array<Image>) => [...prevState, newImage]))
             props.setPreviewImages(((prevState: Array<Image>) => [...prevState, previewImage]))
         }
     }, [props.previewImages, props.setPreviewImages])
@@ -77,7 +71,6 @@ export const PostFormImage = (props: PostFormImageProps) => {
         const newImages = props.previewImages.filter(image => image.id !== id)
 
         props.setPreviewImages(newImages)
-        //props.setImages(newImages)
     }, [props.previewImages])
 
     return (
@@ -94,6 +87,8 @@ export const PostFormImage = (props: PostFormImageProps) => {
                     )
                 )}
             </div>
+
+            <button onClick={props.u}>a</button>
 
             {props.images.length < 4 && (
                 <div>
