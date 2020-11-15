@@ -46,7 +46,10 @@ const UserShow = () => {
             gotUser.uid = doc.id
 
             setUser(gotUser)
-            setLoad(false)
+
+            setTimeout(() => {
+                setLoad(false)
+            }, 100)
         }
         getUser()
     }, [query.uid])
@@ -57,11 +60,11 @@ const UserShow = () => {
                 {error ? (
                     <Error statusCode={404} />
                 ) : (
-                    <div>
+                    <>
                         {user && (
                             <UserShowHeader user={user} load={load} />
                         )}
-                    </div>
+                    </>
                 )}
             </Layout>
         </div>

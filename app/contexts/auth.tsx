@@ -64,7 +64,6 @@ const AuthProvider: React.FC = ({ children }) => {
 
         firebase.auth().onAuthStateChanged(function (result) {
             if (result) {
-                setLoad(true)
 
                 const url = result.photoURL as string | undefined
 
