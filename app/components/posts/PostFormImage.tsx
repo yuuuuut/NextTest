@@ -43,8 +43,8 @@ export const PostFormImage = (props: PostFormImageProps) => {
     new Promise((resolve) => {
       Resizer.imageFileResizer(
         file,
-        500,
-        1000,
+        600,
+        600,
         'JPEG',
         100,
         0,
@@ -69,7 +69,7 @@ export const PostFormImage = (props: PostFormImageProps) => {
 
       if (e.target.files) {
         const file = e.target.files[0]
-        const blob = await resizeFile(file)
+        const blob = (await resizeFile(file)) as Blob
 
         const reader = new FileReader()
 
@@ -86,7 +86,7 @@ export const PostFormImage = (props: PostFormImageProps) => {
               previewImage,
             ])
           }
-          reader.readAsDataURL(file)
+          reader.readAsDataURL(blob)
         }
       }
     },
