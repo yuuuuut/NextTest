@@ -1,49 +1,44 @@
-import { 
-    Card,
-    CardActions,
-    CardMedia,
-    makeStyles,
-} from "@material-ui/core"
+import { Card, CardActions, CardMedia, makeStyles } from '@material-ui/core'
 
-import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteIcon from '@material-ui/icons/Delete'
 
 /** Styles */
 const useStyles = makeStyles(() => ({
-    root: {
-        width: '50%',
-    },
-    media: {
-        height: 0,
-        paddingTop: '80%',
-    },
-}));
+  root: {
+    width: '50%',
+  },
+  media: {
+    height: 0,
+    paddingTop: '80%',
+  },
+}))
 
 /** Types */
 type PostFormImagePreviewProps = {
-    id: string
-    path: string | undefined
-    delete: (id: string) => void
+  id: string
+  path: string | undefined
+  delete: (id: string) => void
 }
 
 /** Main */
 export const PostFormImagePreview = (props: PostFormImagePreviewProps) => {
-    const classes = useStyles();
+  const classes = useStyles()
 
-    return (
-        <>
-            <Card className={classes.root}>
-                <CardMedia
-                    className={classes.media}
-                    image={props.path}
-                    title="Paella dish"
-                />
-                <CardActions>
-                    <DeleteIcon
-                        color="secondary"
-                        onClick={() => props.delete(props.id)}
-                    />
-                </CardActions>
-            </Card>
-        </>
-    )
+  return (
+    <>
+      <Card className={classes.root}>
+        <CardMedia
+          className={classes.media}
+          image={props.path}
+          title="Paella dish"
+        />
+        <CardActions>
+          <DeleteIcon
+            color="secondary"
+            onClick={() => props.delete(props.id)}
+          />
+        </CardActions>
+      </Card>
+    </>
+  )
 }
