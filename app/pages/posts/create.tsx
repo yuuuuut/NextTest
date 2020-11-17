@@ -1,8 +1,9 @@
 import { useState } from 'react'
 
-import { Button, LinearProgress, makeStyles } from '@material-ui/core'
+import { LinearProgress, makeStyles } from '@material-ui/core'
 
 import { PostFormBodyInput } from '../../components/posts/PostFormBodyInput'
+import { PostFormButton } from '../../components/posts/PostFormButton'
 import { PostFormImage } from '../../components/posts/PostFormImage'
 import { Layout } from '../../components/Layout'
 
@@ -107,22 +108,7 @@ const Create = () => {
                 <LinearProgress />
               </div>
             ) : (
-              <div>
-                {body === '' || body.length > maxBody ? (
-                  <Button fullWidth={true} variant="outlined" disabled>
-                    投稿
-                  </Button>
-                ) : (
-                  <Button
-                    onClick={upload}
-                    fullWidth={true}
-                    variant="outlined"
-                    color="primary"
-                  >
-                    投稿
-                  </Button>
-                )}
-              </div>
+              <PostFormButton body={body} maxBody={maxBody} upload={upload} />
             )}
           </div>
         </form>
