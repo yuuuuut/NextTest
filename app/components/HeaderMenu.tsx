@@ -41,28 +41,30 @@ export const HeaderMenu = () => {
 
   return (
     <div className={classes.toolbarButtons}>
-      {user && (
-        <div>
-          <IconButton
-            aria-controls="menu-appbar"
-            aria-haspopup="true"
-            onClick={handleMenu}
-            color="inherit"
-          >
-            {load ? (
-              <Skeleton variant="circle" width={40} height={40} />
-            ) : (
-              <AvatarKit src={user.photoURL} />
-            )}
-          </IconButton>
-          <MenuKit
-            anchorEl={anchorEl}
-            uid={user.uid}
-            handleClose={handleClose}
-            handleLogout={handleLogout}
-          />
-        </div>
-      )}
+      <div>
+        <IconButton
+          aria-controls="menu-appbar"
+          aria-haspopup="true"
+          onClick={handleMenu}
+          color="inherit"
+        >
+          {load ? (
+            <Skeleton variant="circle" width={40} height={40} />
+          ) : (
+            // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+            // @ts-ignore
+            <AvatarKit src={user.photoURL} />
+          )}
+        </IconButton>
+        <MenuKit
+          anchorEl={anchorEl}
+          // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+          // @ts-ignore
+          uid={user.uid}
+          handleClose={handleClose}
+          handleLogout={handleLogout}
+        />
+      </div>
     </div>
   )
 }
