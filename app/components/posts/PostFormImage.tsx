@@ -17,9 +17,6 @@ const useStyles = makeStyles(() =>
       width: '100%',
       marginTop: '10px',
     },
-    mt: {
-      marginTop: '5px',
-    },
     input: {
       display: 'none',
     },
@@ -119,7 +116,6 @@ export const PostFormImage = (props: PostFormImageProps) => {
           />
           <label htmlFor="icon-button-file">
             <Chip
-              className={classes.mt}
               icon={<PhotoCamera />}
               label={'画像を追加'}
               variant="outlined"
@@ -131,14 +127,12 @@ export const PostFormImage = (props: PostFormImageProps) => {
       <div className={classes.imageList}>
         {props.previewImages.length > 0 &&
           props.previewImages.map((image) => (
-            <>
-              <PostFormImagePreview
-                id={image.id}
-                path={image.path}
-                key={image.id}
-                delete={deleteImage}
-              />
-            </>
+            <PostFormImagePreview
+              id={image.id}
+              path={image.path}
+              key={image.id}
+              delete={deleteImage}
+            />
           ))}
       </div>
     </div>

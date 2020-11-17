@@ -1,15 +1,12 @@
 import { useState } from 'react'
 
-import {
-  Button,
-  LinearProgress,
-  makeStyles,
-  TextField,
-} from '@material-ui/core'
+import { Button, LinearProgress, makeStyles } from '@material-ui/core'
 
-import { Image, PreviewImage } from '../../models/Post'
+import { PostFormBodyInput } from '../../components/posts/PostFormBodyInput'
 import { PostFormImage } from '../../components/posts/PostFormImage'
 import { Layout } from '../../components/Layout'
+
+import { Image, PreviewImage } from '../../models/Post'
 import { toast } from 'react-toastify'
 import firebase from 'firebase/app'
 
@@ -37,9 +34,13 @@ const Create = () => {
   const classes = useStyles()
 
   const [body, setBody] = useState('')
+  const maxBody = 100
   const [previewImages, setPreviewImages] = useState<Array<PreviewImage>>([])
   const [isSending, setIsSending] = useState(false)
 
+  /**
+   * 画像をstorage上にアップロードし、postsとしてfirestoreに保存する
+   */
   const upload = async () => {
     setIsSending(true)
 
@@ -69,6 +70,7 @@ const Create = () => {
     })
 
     setPreviewImages([])
+    setBody('')
     setIsSending(false)
 
     toast.success('投稿しました。', {
@@ -87,35 +89,40 @@ const Create = () => {
       <div className={classes.container}>
         <form>
           <div className={classes.containerM}>
-            <TextField
-              fullWidth={true}
-              id="outlined-multiline-static"
-              label="本文"
-              multiline
-              rows={5}
-              variant="outlined"
-              value={body}
-              onChange={(e) => setBody(e.target.value)}
+            <PostFormBodyInput
+              body={body}
+              maxBody={maxBody}
+              setBody={setBody}
             />
           </div>
-          <PostFormImage
-            previewImages={previewImages}
-            setPreviewImages={setPreviewImages}
-          />
+          <div className={classes.containerM}>
+            <PostFormImage
+              previewImages={previewImages}
+              setPreviewImages={setPreviewImages}
+            />
+          </div>
           <div className={classes.containerM}>
             {isSending ? (
               <div className={classes.progress}>
                 <LinearProgress />
               </div>
             ) : (
-              <Button
-                onClick={upload}
-                fullWidth={true}
-                variant="outlined"
-                color="primary"
-              >
-                投稿
-              </Button>
+              <div>
+                {body === '' || body.length > maxBody ? (
+                  <Button fullWidth={true} variant="outlined" disabled>
+                    投稿
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={upload}
+                    fullWidth={true}
+                    variant="outlined"
+                    color="primary"
+                  >
+                    投稿
+                  </Button>
+                )}
+              </div>
             )}
           </div>
         </form>
