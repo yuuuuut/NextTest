@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 import { AppBar, Button, Toolbar, Typography } from '@material-ui/core'
 
-import AddBoxIcon from '@material-ui/icons/AddBox'
+import PostAddIcon from '@material-ui/icons/PostAdd'
 
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -24,7 +24,7 @@ export const Layout: React.FC = ({ children }) => {
             <Button
               variant="contained"
               color="secondary"
-              endIcon={<AddBoxIcon />}
+              endIcon={<PostAddIcon />}
             >
               投稿
             </Button>

@@ -15,9 +15,10 @@ const useStyles = makeStyles(() =>
       display: 'flex',
       flexWrap: 'wrap',
       width: '100%',
+      marginTop: '10px',
     },
     mt: {
-      marginTop: '8px',
+      marginTop: '5px',
     },
     input: {
       display: 'none',
@@ -107,20 +108,6 @@ export const PostFormImage = (props: PostFormImageProps) => {
 
   return (
     <div>
-      <div className={classes.imageList}>
-        {props.previewImages.length > 0 &&
-          props.previewImages.map((image) => (
-            <>
-              <PostFormImagePreview
-                id={image.id}
-                path={image.path}
-                key={image.id}
-                delete={deleteImage}
-              />
-            </>
-          ))}
-      </div>
-
       {props.previewImages.length < 4 && (
         <div>
           <input
@@ -134,12 +121,26 @@ export const PostFormImage = (props: PostFormImageProps) => {
             <Chip
               className={classes.mt}
               icon={<PhotoCamera />}
-              label="画像を追加"
+              label={'画像を追加'}
               variant="outlined"
             />
           </label>
         </div>
       )}
+
+      <div className={classes.imageList}>
+        {props.previewImages.length > 0 &&
+          props.previewImages.map((image) => (
+            <>
+              <PostFormImagePreview
+                id={image.id}
+                path={image.path}
+                key={image.id}
+                delete={deleteImage}
+              />
+            </>
+          ))}
+      </div>
     </div>
   )
 }

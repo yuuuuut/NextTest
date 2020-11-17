@@ -36,7 +36,6 @@ const useStyles = makeStyles(() => ({
 const Create = () => {
   const classes = useStyles()
 
-  const [title, setTitle] = useState('')
   const [body, setBody] = useState('')
   const [previewImages, setPreviewImages] = useState<Array<PreviewImage>>([])
   const [isSending, setIsSending] = useState(false)
@@ -64,7 +63,6 @@ const Create = () => {
 
     await firebase.firestore().collection('posts').add({
       userId: firebase.auth().currentUser?.uid,
-      title,
       images: images,
       body,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -88,15 +86,6 @@ const Create = () => {
     <Layout>
       <div className={classes.container}>
         <form>
-          <TextField
-            fullWidth={true}
-            id="outlined-multiline-flexible"
-            label="タイトル"
-            multiline
-            variant="outlined"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
           <div className={classes.containerM}>
             <TextField
               fullWidth={true}
