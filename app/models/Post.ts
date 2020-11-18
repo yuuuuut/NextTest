@@ -8,3 +8,11 @@ export type PreviewImage = {
   path: string | undefined
   blob: Blob
 }
+
+export type Post = {
+  id: string
+  body: string
+  images: Array<Image>
+  userId: string
+  createdAt: firebase.default.firestore.Timestamp
+}
