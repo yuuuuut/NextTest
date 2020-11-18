@@ -47,42 +47,47 @@ const Create = () => {
 
     const images: Array<Image> = []
 
-    await Promise.all(
-      previewImages.map(async (image) => {
-        const uploadRef = firebase.storage().ref('images').child(image.id)
-        const uploadTask = uploadRef.put(image.blob)
+    try {
+      await Promise.all(
+        previewImages.map(async (image) => {
+          const uploadRef = firebase.storage().ref('images').child(image.id)
+          const uploadTask = uploadRef.put(image.blob)
 
-        const snapshot = await uploadTask
-        const url: string = await snapshot.ref.getDownloadURL()
+          const snapshot = await uploadTask
+          const url: string = await snapshot.ref.getDownloadURL()
 
-        const newImage = {
-          id: image.id,
-          path: url,
-        }
-        images.push(newImage)
+          const newImage = {
+            id: image.id,
+            path: url,
+          }
+          images.push(newImage)
+        })
+      )
+
+      await firebase.firestore().collection('posts').add({
+        userId: firebase.auth().currentUser?.uid,
+        images: images,
+        body,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       })
-    )
 
-    await firebase.firestore().collection('posts').add({
-      userId: firebase.auth().currentUser?.uid,
-      images: images,
-      body,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-    })
+      setPreviewImages([])
+      setBody('')
+      setIsSending(false)
 
-    setPreviewImages([])
-    setBody('')
-    setIsSending(false)
-
-    toast.success('投稿しました。', {
-      position: 'bottom-left',
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    })
+      toast.success('投稿しました。', {
+        position: 'bottom-left',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    } catch (e) {
+      alert('エラーが発生しました。')
+      setIsSending(false)
+    }
   }
 
   return (
