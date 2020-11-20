@@ -33,12 +33,14 @@ const useStyles = makeStyles((theme: Theme) =>
 type AuthContextType = {
   user: User | null
   load: boolean
+  notAuthenticated: boolean
   signout: () => Promise<void>
 }
 
 const AuthContext = createContext<Partial<AuthContextType>>({
   user: null,
   load: false,
+  notAuthenticated: false,
   signout: undefined,
 })
 
@@ -60,6 +62,7 @@ async function createUser(user: User) {
 const AuthProvider: React.FC = ({ children }) => {
   const [user, setUser] = useState<User | null>(null)
   const [load, setLoad] = useState(true)
+  const [notAuthenticated, setNotAuthenticated] = useState(false)
 
   const signout = useCallback(async () => {
     await firebase
@@ -83,6 +86,7 @@ const AuthProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     if (user !== null) {
+      setNotAuthenticated(false)
       setLoad(false)
       return
     }
@@ -100,8 +104,10 @@ const AuthProvider: React.FC = ({ children }) => {
         setUser(loginUser)
         createUser(loginUser)
 
+        setNotAuthenticated(false)
         setLoad(false)
       } else {
+        setNotAuthenticated(true)
         setUser(null)
         setLoad(false)
       }
@@ -109,7 +115,7 @@ const AuthProvider: React.FC = ({ children }) => {
   }, [])
 
   return (
-    <AuthContext.Provider value={{ load, user, signout }}>
+    <AuthContext.Provider value={{ load, user, notAuthenticated, signout }}>
       {children}
     </AuthContext.Provider>
   )

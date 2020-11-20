@@ -1,10 +1,11 @@
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 
 import firebase from 'firebase/app'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 
 import { Layout } from '../components/Layout'
 import { AuthContext } from '../contexts/auth'
+import { toast } from 'react-toastify'
 
 const uiConfig = {
   signInFlow: 'popup',
@@ -12,7 +13,21 @@ const uiConfig = {
 }
 
 export const Home = () => {
-  const { user, load } = useContext(AuthContext)
+  const { user, load, notAuthenticated } = useContext(AuthContext)
+
+  useEffect(() => {
+    if (notAuthenticated) {
+      toast.warning('ログインが必要です。', {
+        position: 'bottom-left',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    }
+  }, [])
 
   return (
     <div>
