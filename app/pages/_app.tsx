@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 
 import { ThemeProvider } from '@material-ui/core'
-import { AuthProvider } from '../contexts/auth'
+import { AuthPgae, AuthProvider } from '../contexts/auth'
 import theme from '../components/theme'
 
 import '../lib/firebase'
@@ -15,7 +15,15 @@ const MyApp = ({ Component, pageProps }: any) => {
     }
   }, [])
 
-  return (
+  return pageProps.authPage ? (
+    <ThemeProvider theme={theme}>
+      <AuthProvider>
+        <AuthPgae>
+          <Component {...pageProps} />
+        </AuthPgae>
+      </AuthProvider>
+    </ThemeProvider>
+  ) : (
     <ThemeProvider theme={theme}>
       <AuthProvider>
         <Component {...pageProps} />

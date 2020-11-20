@@ -1,8 +1,34 @@
-import React, { createContext, useCallback, useEffect, useState } from 'react'
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
 
-import firebase from 'firebase/app'
+import {
+  Backdrop,
+  CircularProgress,
+  createStyles,
+  makeStyles,
+  Theme,
+} from '@material-ui/core'
+
+import { Layout } from '../components/Layout'
+
 import { toast } from 'react-toastify'
+import { useRouter } from 'next/router'
+import firebase from 'firebase/app'
 import { User } from '../models/User'
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    backdrop: {
+      zIndex: theme.zIndex.drawer + 1,
+      color: '#fff',
+    },
+  })
+)
 
 type AuthContextType = {
   user: User | null
@@ -42,7 +68,7 @@ const AuthProvider: React.FC = ({ children }) => {
       .then(() => {
         toast.success('ログアウトしました。', {
           position: 'bottom-left',
-          autoClose: 5000,
+          autoClose: 3000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -57,6 +83,7 @@ const AuthProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     if (user !== null) {
+      setLoad(false)
       return
     }
 
@@ -88,4 +115,28 @@ const AuthProvider: React.FC = ({ children }) => {
   )
 }
 
-export { AuthContext, AuthProvider }
+const AuthPgae: React.FC = ({ children }) => {
+  const { user, load } = useContext(AuthContext)
+  const classes = useStyles()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (user === null && !load) {
+      router.push('/')
+    }
+  }, [user, load])
+
+  return (
+    <Layout>
+      {user === null ? (
+        <Backdrop className={classes.backdrop} open={true}>
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      ) : (
+        <>{children}</>
+      )}
+    </Layout>
+  )
+}
+
+export { AuthContext, AuthProvider, AuthPgae }

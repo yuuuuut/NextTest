@@ -5,7 +5,6 @@ import { LinearProgress, makeStyles } from '@material-ui/core'
 import { PostFormBodyInput } from '../../components/posts/PostFormBodyInput'
 import { PostFormButton } from '../../components/posts/PostFormButton'
 import { PostFormImage } from '../../components/posts/PostFormImage'
-import { Layout } from '../../components/Layout'
 
 import { Image, PreviewImage } from '../../models/Post'
 import { toast } from 'react-toastify'
@@ -91,7 +90,7 @@ const Create = () => {
   }
 
   return (
-    <Layout>
+    <>
       <div className={classes.container}>
         <form>
           <div className={classes.containerM}>
@@ -118,8 +117,14 @@ const Create = () => {
           </div>
         </form>
       </div>
-    </Layout>
+    </>
   )
 }
+
+export const getServerSideProps = async () => ({
+  props: {
+    authPage: true,
+  },
+})
 
 export default Create
