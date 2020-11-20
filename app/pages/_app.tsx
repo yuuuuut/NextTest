@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react'
 
 import { ThemeProvider } from '@material-ui/core'
-import { AuthPgae, AuthProvider } from '../contexts/auth'
-import theme from '../components/theme'
 
+import { AuthRequired } from '../contexts/AuthRequired'
+import { AuthProvider } from '../contexts/auth'
+import theme from '../components/theme'
 import '../lib/firebase'
 
 const MyApp = ({ Component, pageProps }: any) => {
@@ -18,9 +19,9 @@ const MyApp = ({ Component, pageProps }: any) => {
   return pageProps.authPage ? (
     <ThemeProvider theme={theme}>
       <AuthProvider>
-        <AuthPgae>
+        <AuthRequired>
           <Component {...pageProps} />
-        </AuthPgae>
+        </AuthRequired>
       </AuthProvider>
     </ThemeProvider>
   ) : (
