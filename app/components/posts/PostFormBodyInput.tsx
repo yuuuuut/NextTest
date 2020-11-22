@@ -35,6 +35,7 @@ export const PostFormBodyInput = (props: PostFormBodyInputProps) => {
   return (
     <>
       <TextField
+        data-testid="text-field"
         fullWidth={true}
         id="outlined-multiline-static"
         label="本文"
@@ -51,12 +52,15 @@ export const PostFormBodyInput = (props: PostFormBodyInputProps) => {
         onChange={(e) => props.setBody(e.target.value)}
       />
       <Typography
+        data-testid="text-length"
         className={classes.positionRight}
         variant="button"
         display="block"
         gutterBottom
       >
-        {bodyLength}/100
+        <p>
+          {bodyLength}/{maxBody}
+        </p>
       </Typography>
     </>
   )
