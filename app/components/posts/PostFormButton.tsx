@@ -20,6 +20,7 @@ export const PostFormButton = (props: PostFormButtonProps) => {
         </Button>
       ) : (
         <Button
+          data-testid="addButton"
           onClick={props.upload}
           fullWidth={true}
           variant="outlined"

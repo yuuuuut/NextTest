@@ -113,6 +113,7 @@ export const PostFormImage = (props: PostFormImageProps) => {
             id="icon-button-file"
             type="file"
             onChange={(e) => upload(e)}
+            data-testid="input"
           />
           <label htmlFor="icon-button-file">
             <Chip

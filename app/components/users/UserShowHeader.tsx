@@ -33,16 +33,27 @@ export const UserShowHeader = (props: UserShowHeaderProps) => {
       <Grid container alignItems="center" justify="center">
         <Grid item className={classes.mt4}>
           {load ? (
-            <Skeleton variant="circle" width={96} height={96} />
+            <Skeleton
+              data-testid="photo-skeleton"
+              variant="circle"
+              width={96}
+              height={96}
+            />
           ) : (
-            <UserShowHeaderImage user={user} />
+            <div data-testid="photo">
+              <UserShowHeaderImage user={user} />
+            </div>
           )}
         </Grid>
       </Grid>
       <Grid container alignItems="center" justify="center">
         <Grid item className={classes.mt2}>
           <Typography variant="h3">
-            {load ? <Skeleton /> : user.displayName}
+            {load ? (
+              <Skeleton data-testid="name-skeleton" />
+            ) : (
+              <div data-testid="name">{user.displayName}</div>
+            )}
           </Typography>
         </Grid>
       </Grid>
