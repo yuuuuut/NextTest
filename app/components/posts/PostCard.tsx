@@ -4,73 +4,61 @@ import {
   CardContent,
   CardHeader,
   CardMedia,
-  createStyles,
   IconButton,
   makeStyles,
-  Theme,
   Typography,
 } from '@material-ui/core'
-import { Favorite, MoreVert, Share } from '@material-ui/icons'
+
+import { Favorite, MoreVert } from '@material-ui/icons'
 import { AvatarKit } from '../UI/Avatar'
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      maxWidth: 345,
-    },
-    media: {
-      height: 0,
-      paddingTop: '56.25%', // 16:9
-    },
-    expand: {
-      transform: 'rotate(0deg)',
-      marginLeft: 'auto',
-      transition: theme.transitions.create('transform', {
-        duration: theme.transitions.duration.shortest,
-      }),
-    },
-  })
-)
+/** Style */
+const useStyles = makeStyles({
+  root: {
+    width: 300,
+  },
+  media: {
+    height: 0,
+    paddingTop: '60.25%',
+  },
+})
 
+/** Types */
 type PostCard = {
+  id: string
+  path: string
   body: string
+  photoURL: string
+  displayName: string
 }
 
+/** Main */
 export const PostCard = (props: PostCard) => {
   const classes = useStyles()
 
   return (
-    <div>
-      <Card className={classes.root}>
-        <CardHeader
-          avatar={<AvatarKit src={'a'} />}
-          action={
-            <IconButton aria-label="settings">
-              <MoreVert />
-            </IconButton>
-          }
-          title="Shrimp and Chorizo Paella"
-          subheader="September 14, 2016"
-        />
-        <CardMedia
-          className={classes.media}
-          image="/static/images/cards/paella.jpg"
-          title="Paella dish"
-        />
-        <CardContent>
-          <Typography variant="body2" color="textSecondary" component="p">
-            {props.body}
-          </Typography>
-        </CardContent>
-        <CardActions disableSpacing>
-          <IconButton aria-label="add to favorites">
-            <Favorite />
+    <Card className={classes.root}>
+      <CardHeader
+        avatar={<AvatarKit src={props.photoURL} />}
+        action={
+          <IconButton aria-label="settings">
+            <MoreVert />
           </IconButton>
-          <IconButton aria-label="share">
-            <Share />
-          </IconButton>
-        </CardActions>
-      </Card>
-    </div>
+        }
+        title={props.displayName}
+        subheader="September 14, 2016"
+      />
+      <CardMedia className={classes.media} image={props.path} />
+      <CardContent>
+        <Typography variant="body2" color="textSecondary" component="p">
+          {props.body}
+        </Typography>
+      </CardContent>
+      <CardActions disableSpacing>
+        <IconButton aria-label="add to favorites">
+          <Favorite />
+        </IconButton>
+      </CardActions>
+    </Card>
   )
 }

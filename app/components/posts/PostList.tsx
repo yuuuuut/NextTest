@@ -1,13 +1,41 @@
 import { useEffect, useState } from 'react'
 
-import { Card, CardContent } from '@material-ui/core'
+import { createStyles, makeStyles } from '@material-ui/core'
 
 import { User } from '../../models/User'
 import { Post } from '../../models/Post'
+import { PostCard } from './PostCard'
 import firebase from 'firebase/app'
+
+/** Styles */
+const useStyles = makeStyles(() =>
+  createStyles({
+    root: {
+      display: 'flex',
+    },
+    main: {
+      width: '100%',
+      backgroundColor: 'ghostwhite',
+    },
+    cardArea: {
+      display: 'flex',
+      justifyContent: 'center',
+      flexWrap: 'wrap',
+      marginTop: '20px',
+      marginRight: '40px',
+      marginLeft: '40px',
+    },
+    card: {
+      padding: '10px',
+    },
+  })
+)
 
 /** Main */
 export const PostList = () => {
+  const classes = useStyles()
+
+  // State
   const [posts, setPosts] = useState<Array<Post>>([])
   const [load, setLoad] = useState(false)
 
@@ -34,6 +62,7 @@ export const PostList = () => {
     return newPosts
   }
 
+  // useEffect
   useEffect(() => {
     const loadPosts = async () => {
       setLoad(true)
@@ -56,18 +85,25 @@ export const PostList = () => {
       {load ? (
         <div>loding...</div>
       ) : (
-        <>
-          {posts.length > 0 && (
-            <>
-              <div>{posts.length}</div>
-              {posts.map((post) => (
-                <Card key={post.id}>
-                  <CardContent>{post.userData.photoURL}</CardContent>
-                </Card>
-              ))}
-            </>
-          )}
-        </>
+        <div className={classes.root}>
+          <div className={classes.main}>
+            {posts.length > 0 && (
+              <div className={classes.cardArea}>
+                {posts.map((post) => (
+                  <div key={post.id} className={classes.card}>
+                    <PostCard
+                      id={post.id}
+                      path={post.images[0].path}
+                      body={post.body}
+                      photoURL={post.userData.photoURL as string}
+                      displayName={post.userData.displayName as string}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
       )}
     </div>
   )

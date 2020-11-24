@@ -2,14 +2,13 @@ import React, { useContext } from 'react'
 import Link from 'next/link'
 
 import { AppBar, Button, Toolbar, Typography } from '@material-ui/core'
-
-import PostAddIcon from '@material-ui/icons/PostAdd'
+import { PostAdd } from '@material-ui/icons'
 
 import { ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-
-import { HeaderMenu } from './HeaderMenu'
 import { AuthContext } from '../contexts/auth'
+import { HeaderMenu } from './HeaderMenu'
+
+import 'react-toastify/dist/ReactToastify.css'
 
 /** Main */
 export const Layout: React.FC = ({ children }) => {
@@ -29,7 +28,7 @@ export const Layout: React.FC = ({ children }) => {
                 <Button
                   variant="contained"
                   color="secondary"
-                  endIcon={<PostAddIcon />}
+                  endIcon={<PostAdd />}
                 >
                   投稿
                 </Button>
