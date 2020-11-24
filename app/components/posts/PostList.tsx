@@ -11,6 +11,29 @@ export const PostList = () => {
   const [posts, setPosts] = useState<Array<Post>>([])
   const [load, setLoad] = useState(false)
 
+  /**
+   * PostにidとuserDataを追加してnewPosts[]にpushする
+   * @param snapshot
+   * @return {Array<Post>} Postの配列
+   */
+  const getNewPosts = async (snapshot: firebase.firestore.QuerySnapshot) => {
+    const newPosts: Array<Post> = []
+
+    await Promise.all(
+      snapshot.docs.map(async (doc) => {
+        const post = doc.data() as Post
+        post.id = doc.id
+
+        const user = await post.user.get()
+
+        post.userData = user.data() as User
+
+        newPosts.push(post)
+      })
+    )
+    return newPosts
+  }
+
   useEffect(() => {
     const loadPosts = async () => {
       setLoad(true)
@@ -20,20 +43,8 @@ export const PostList = () => {
         return
       }
 
-      const newPosts: Array<Post> = []
+      const newPosts = await getNewPosts(snapshot)
 
-      await Promise.all(
-        snapshot.docs.map(async (doc) => {
-          const post = doc.data() as Post
-          post.id = doc.id
-
-          const user = await post.user.get()
-
-          post.userData = user.data() as User
-
-          newPosts.push(post)
-        })
-      )
       setPosts(newPosts)
       setLoad(false)
     }
