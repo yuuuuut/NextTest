@@ -63,8 +63,14 @@ const Create = () => {
         })
       )
 
+      const currentUserUid = firebase.auth().currentUser?.uid
+      const userRef = await firebase
+        .firestore()
+        .collection('users')
+        .doc(currentUserUid)
+
       await firebase.firestore().collection('posts').add({
-        userId: firebase.auth().currentUser?.uid,
+        user: userRef,
         images: images,
         body,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),

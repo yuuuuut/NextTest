@@ -1,10 +1,11 @@
 import { useContext, useEffect } from 'react'
 
-import firebase from 'firebase/app'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
+import firebase from 'firebase/app'
 
-import { Layout } from '../components/Layout'
+import { PostList } from '../components/posts/PostList'
 import { AuthContext } from '../contexts/auth'
+import { Layout } from '../components/Layout'
 import { toast } from 'react-toastify'
 
 const uiConfig = {
@@ -12,6 +13,7 @@ const uiConfig = {
   signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
 }
 
+/** Main */
 export const Home = () => {
   const { user, load, notAuthenticated } = useContext(AuthContext)
 
@@ -37,27 +39,16 @@ export const Home = () => {
         ) : (
           <div>
             {user ? (
-              <h1 className="t-color">
-                Login{user.displayName}
-                <img src={user.photoURL} />
-              </h1>
+              <PostList />
             ) : (
-              <div>
-                <StyledFirebaseAuth
-                  uiConfig={uiConfig}
-                  firebaseAuth={firebase.auth()}
-                />
-              </div>
+              <StyledFirebaseAuth
+                uiConfig={uiConfig}
+                firebaseAuth={firebase.auth()}
+              />
             )}
           </div>
         )}
       </Layout>
-
-      <style jsx>{`
-        .t-color {
-          color: red;
-        }
-      `}</style>
     </div>
   )
 }

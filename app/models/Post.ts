@@ -1,3 +1,5 @@
+import { User } from './User'
+
 export type Image = {
   id: string
   path: string
@@ -13,6 +15,7 @@ export type Post = {
   id: string
   body: string
   images: Array<Image>
-  userId: string
+  user: firebase.default.firestore.DocumentReference
+  userData: User
   createdAt: firebase.default.firestore.Timestamp
 }
