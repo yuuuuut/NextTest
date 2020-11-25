@@ -93,6 +93,7 @@ export const PostList = () => {
                   <div key={post.id} className={classes.card}>
                     <PostCard
                       id={post.id}
+                      images={post.images}
                       path={post.images[0].path}
                       body={post.body}
                       photoURL={post.userData.photoURL as string}
