@@ -52,33 +52,21 @@ export const PostCardMedia = (props: PostCardMediaProps) => {
       <div className={classes.imageMain}>
         {imgLength === 1 ? (
           <img src={images[0].path} className={classes.oneImage} />
-        ) : imgLength === 2 ? (
-          <>
-            {images.map((image) => (
-              <img
-                key={image.id}
-                src={image.path}
-                className={classes.twoImage}
-              />
-            ))}
-          </>
-        ) : imgLength === 3 ? (
+        ) : (
           <>
             {images.map((image, idx) => (
               <img
                 key={image.id}
                 src={image.path}
-                className={idx === 2 ? classes.threeImage : classes.fourImage}
-              />
-            ))}
-          </>
-        ) : (
-          <>
-            {images.map((image) => (
-              <img
-                key={image.id}
-                src={image.path}
-                className={classes.fourImage}
+                className={
+                  imgLength === 2
+                    ? classes.twoImage
+                    : imgLength === 3 && idx === 2
+                    ? classes.threeImage
+                    : imgLength === 3
+                    ? classes.fourImage
+                    : classes.fourImage
+                }
               />
             ))}
           </>
