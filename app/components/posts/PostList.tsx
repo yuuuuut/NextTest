@@ -62,7 +62,6 @@ export const PostList = () => {
     return newPosts
   }
 
-  // useEffect
   useEffect(() => {
     const loadPosts = async () => {
       setLoad(true)
@@ -75,37 +74,35 @@ export const PostList = () => {
       const newPosts = await getNewPosts(snapshot)
 
       setPosts(newPosts)
-      setLoad(false)
+
+      setTimeout(() => {
+        setLoad(false)
+      }, 400)
     }
     loadPosts()
   }, [])
 
   return (
-    <div>
-      {load ? (
-        <div>loding...</div>
-      ) : (
-        <div className={classes.root}>
-          <div className={classes.main}>
-            {posts.length > 0 && (
-              <div className={classes.cardArea}>
-                {posts.map((post) => (
-                  <div key={post.id} className={classes.card}>
-                    <PostCard
-                      id={post.id}
-                      images={post.images}
-                      path={post.images[0].path}
-                      body={post.body}
-                      photoURL={post.userData.photoURL as string}
-                      displayName={post.userData.displayName as string}
-                    />
-                  </div>
-                ))}
+    <div className={classes.root}>
+      <div className={classes.main}>
+        {posts.length > 0 && (
+          <div className={classes.cardArea}>
+            {posts.map((post) => (
+              <div key={post.id} className={classes.card}>
+                <PostCard
+                  load={load}
+                  id={post.id}
+                  images={post.images}
+                  path={post.images[0].path}
+                  body={post.body}
+                  photoURL={post.userData.photoURL as string}
+                  displayName={post.userData.displayName as string}
+                />
               </div>
-            )}
+            ))}
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   )
 }

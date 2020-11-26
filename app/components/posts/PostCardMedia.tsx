@@ -9,7 +9,9 @@ import {
   makeStyles,
   Theme,
 } from '@material-ui/core'
+
 import { ChevronLeft, ChevronRight, Close } from '@material-ui/icons'
+import { Skeleton } from '@material-ui/lab'
 import { Image } from '../../models/Post'
 
 /** Style */
@@ -47,12 +49,18 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     backdrop: {
       zIndex: theme.zIndex.drawer + 1,
+      backgroundColor: 'rgba(0, 0, 0, 0.4)',
       color: '#fff',
     },
     backdropImage: {
       width: '100%',
       maxWidth: '100%',
       height: 'auto',
+    },
+    iconButtonBg: {
+      backgroundColor: '#777777',
+      opacity: 0.9,
+      pointerEvents: 'none',
     },
     white: {
       color: 'white',
@@ -62,12 +70,14 @@ const useStyles = makeStyles((theme: Theme) =>
 
 /** Types */
 type PostCardMediaProps = {
+  load: boolean
   images: Array<Image>
 }
 
 /** Main */
 export const PostCardMedia = (props: PostCardMediaProps) => {
   const classes = useStyles()
+  const load = props.load
   const images = props.images
   const imgLength = props.images.length
 
@@ -116,66 +126,91 @@ export const PostCardMedia = (props: PostCardMediaProps) => {
   }
 
   return (
-    <CardMedia>
-      <div className={classes.imageMain}>
-        {imgLength === 1 ? (
-          <img src={images[0].path} className={classes.oneImage} />
-        ) : (
-          <>
-            {images.map((image, idx) => (
+    <>
+      {load ? (
+        <Skeleton
+          animation="wave"
+          variant="rect"
+          className={classes.imageMain}
+        />
+      ) : (
+        <CardMedia>
+          <div className={classes.imageMain}>
+            {imgLength === 1 ? (
+              <img src={images[0].path} className={classes.oneImage} />
+            ) : (
               <>
-                <img
-                  key={idx}
-                  src={image.path}
-                  onClick={() => handleToggle(idx)}
-                  className={
-                    imgLength === 2
-                      ? classes.twoImage
-                      : imgLength === 3 && idx === 2
-                      ? classes.threeImage
-                      : imgLength === 3
-                      ? classes.fourImage
-                      : classes.fourImage
-                  }
-                />
-                <Backdrop className={classes.backdrop} open={open}>
-                  <Box
-                    position="absolute"
-                    top={20}
-                    right={50}
-                    onClick={handleClose}
-                  >
-                    <IconButton>
-                      <Close className={classes.white} fontSize="large" />
-                    </IconButton>
-                  </Box>
-                  <div>
-                    <img src={currentImage} className={classes.backdropImage} />
-                  </div>
-                  <Box position="absolute" top={325} right={20}>
-                    {currentIndex !== imgLength - 1 && (
-                      <div onClick={() => add(currentIndex)}>
-                        <IconButton color="primary">
-                          <ChevronRight fontSize="large" />
+                {images.map((image, idx) => (
+                  <>
+                    <img
+                      key={idx}
+                      src={image.path}
+                      onClick={() => handleToggle(idx)}
+                      className={
+                        imgLength === 2
+                          ? classes.twoImage
+                          : imgLength === 3 && idx === 2
+                          ? classes.threeImage
+                          : imgLength === 3
+                          ? classes.fourImage
+                          : classes.fourImage
+                      }
+                    />
+                    <Backdrop className={classes.backdrop} open={open}>
+                      <Box
+                        position="absolute"
+                        top={20}
+                        right={30}
+                        onClick={handleClose}
+                      >
+                        <IconButton className={classes.iconButtonBg}>
+                          <Close className={classes.white} fontSize="large" />
                         </IconButton>
+                      </Box>
+                      <div>
+                        <img
+                          src={currentImage}
+                          className={classes.backdropImage}
+                        />
                       </div>
-                    )}
-                  </Box>
-                  <Box position="absolute" top={325} left={20}>
-                    {currentIndex !== 0 && (
-                      <div onClick={() => back(currentIndex)}>
-                        <IconButton color="primary">
-                          <ChevronLeft fontSize="large" />
-                        </IconButton>
-                      </div>
-                    )}
-                  </Box>
-                </Backdrop>
+                      <Box position="absolute" top={325} right={20}>
+                        {currentIndex !== imgLength - 1 && (
+                          <div onClick={() => add(currentIndex)}>
+                            <IconButton
+                              color="primary"
+                              className={classes.iconButtonBg}
+                            >
+                              <ChevronRight
+                                className={classes.white}
+                                fontSize="large"
+                              />
+                            </IconButton>
+                          </div>
+                        )}
+                      </Box>
+                      <Box position="absolute" top={325} left={20}>
+                        {currentIndex !== 0 && (
+                          <div onClick={() => back(currentIndex)}>
+                            <IconButton
+                              color="primary"
+                              className={classes.iconButtonBg}
+                            >
+                              <ChevronLeft
+                                className={classes.white}
+                                fontSize="large"
+                              />
+                            </IconButton>
+                          </div>
+                        )}
+                      </Box>
+                    </Backdrop>
+                  </>
+                ))}
               </>
-            ))}
-          </>
-        )}
-      </div>
-    </CardMedia>
+            )}
+          </div>
+        </CardMedia>
+      )}
+    </>
   )
 }
