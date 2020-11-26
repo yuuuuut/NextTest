@@ -62,6 +62,12 @@ const useStyles = makeStyles((theme: Theme) =>
       opacity: 0.9,
       pointerEvents: 'none',
     },
+    imageCount: {
+      position: 'fixed',
+      top: '50&',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+    },
     white: {
       color: 'white',
     },
@@ -172,6 +178,9 @@ export const PostCardMedia = (props: PostCardMediaProps) => {
                           src={currentImage}
                           className={classes.backdropImage}
                         />
+                        <h3 className={classes.imageCount}>
+                          {currentIndex + 1 + '/' + imgLength}
+                        </h3>
                       </div>
                       <Box position="absolute" top={325} right={20}>
                         {currentIndex !== imgLength - 1 && (
