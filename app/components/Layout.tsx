@@ -1,13 +1,13 @@
 import React, { useContext } from 'react'
 import Link from 'next/link'
 
+import { HeaderMenuIcon } from './header/HeaderMenuIcon'
+import { AuthContext } from '../contexts/auth'
+
 import { AppBar, Button, Toolbar, Typography } from '@material-ui/core'
 import { PostAdd } from '@material-ui/icons'
 
 import { ToastContainer } from 'react-toastify'
-import { AuthContext } from '../contexts/auth'
-import { HeaderMenu } from './HeaderMenu'
-
 import 'react-toastify/dist/ReactToastify.css'
 
 /** Main */
@@ -21,9 +21,9 @@ export const Layout: React.FC = ({ children }) => {
           <Typography variant="h6">
             <Link href="/">Photos</Link>
           </Typography>
-          {user && (
+          {user ? (
             <>
-              <HeaderMenu />
+              <HeaderMenuIcon />
               <Link href="/posts/create">
                 <Button
                   variant="contained"
@@ -34,6 +34,8 @@ export const Layout: React.FC = ({ children }) => {
                 </Button>
               </Link>
             </>
+          ) : (
+            <div>Login</div>
           )}
         </Toolbar>
       </AppBar>

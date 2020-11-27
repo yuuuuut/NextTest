@@ -1,12 +1,11 @@
 import React, { useContext, useState } from 'react'
 
 import { createStyles, IconButton, makeStyles } from '@material-ui/core'
-
 import { Skeleton } from '@material-ui/lab'
 
-import { AuthContext } from '../contexts/auth'
-import { AvatarKit } from './UI/Avatar'
-import { MenuKit } from './UI/Menu'
+import { AuthContext } from '../../contexts/auth'
+import { HeaderMenu } from './HeaderMenu'
+import { AvatarKit } from '../UI/Avatar'
 
 /** Styles */
 const useStyles = makeStyles(() =>
@@ -19,11 +18,10 @@ const useStyles = makeStyles(() =>
 )
 
 /** Main */
-export const HeaderMenu = () => {
+export const HeaderMenuIcon = () => {
   const classes = useStyles()
 
   const { user, load, signout } = useContext(AuthContext)
-
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -34,6 +32,9 @@ export const HeaderMenu = () => {
     setAnchorEl(null)
   }
 
+  /**
+   * ログアウトしてanchorElをnullにする
+   */
   const handleLogout = () => {
     signout && signout()
     setAnchorEl(null)
@@ -51,16 +52,12 @@ export const HeaderMenu = () => {
           {load ? (
             <Skeleton variant="circle" width={40} height={40} />
           ) : (
-            // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-            // @ts-ignore
-            <AvatarKit src={user.photoURL} />
+            <AvatarKit src={user?.photoURL} />
           )}
         </IconButton>
-        <MenuKit
+        <HeaderMenu
           anchorEl={anchorEl}
-          // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-          // @ts-ignore
-          uid={user.uid}
+          uid={user?.uid}
           handleClose={handleClose}
           handleLogout={handleLogout}
         />

@@ -1,6 +1,5 @@
 import React from 'react'
 import Link from 'next/link'
-
 import {
   Divider,
   ListItemIcon,
@@ -56,13 +55,13 @@ type LinkMenuItemProps = Omit<
 
 type MenuKitProps = {
   anchorEl: null | HTMLElement
-  uid: string
+  uid: string | undefined
   handleClose: () => void
   handleLogout: () => void
 }
 
 /** Main */
-export const MenuKit = (props: MenuKitProps) => {
+export const HeaderMenu = (props: MenuKitProps) => {
   return (
     <StyledMenu
       id="menu-appbar"
