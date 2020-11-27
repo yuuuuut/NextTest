@@ -19,6 +19,10 @@ const useStyles = makeStyles({
   root: {
     width: 300,
   },
+  cradMedia: {
+    width: 300,
+    height: 172,
+  },
 })
 
 /** Types */
@@ -35,6 +39,7 @@ type PostCard = {
 /** Main */
 export const PostCard = (props: PostCard) => {
   const classes = useStyles()
+
   const load = props.load
 
   return (
@@ -73,7 +78,15 @@ export const PostCard = (props: PostCard) => {
         }
         subheader="September 14, 2016"
       />
-      <PostCardMedia load={load} images={props.images} />
+      {load ? (
+        <Skeleton
+          animation="wave"
+          variant="rect"
+          className={classes.cradMedia}
+        />
+      ) : (
+        <PostCardMedia images={props.images} />
+      )}
       <CardContent>
         {load ? (
           <>
