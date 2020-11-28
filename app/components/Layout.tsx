@@ -31,7 +31,7 @@ const useStyles = makeStyles(() =>
 export const Layout: React.FC = ({ children }) => {
   const classes = useStyles()
 
-  const { user, signin } = useContext(AuthContext)
+  const { user, load, signin } = useContext(AuthContext)
 
   return (
     <div>
@@ -40,29 +40,37 @@ export const Layout: React.FC = ({ children }) => {
           <Typography variant="h6">
             <Link href="/">Photos</Link>
           </Typography>
-          {user ? (
-            <>
-              <HeaderMenuIcon />
-              <Link href="/posts/create">
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  endIcon={<PostAdd />}
-                >
-                  投稿
-                </Button>
-              </Link>
-            </>
-          ) : (
-            <Button
-              variant="contained"
-              color="secondary"
-              className={classes.loginButton}
-              onClick={signin}
-            >
-              ログイン
-            </Button>
-          )}
+          <>
+            {load ? (
+              <></>
+            ) : (
+              <>
+                {user ? (
+                  <>
+                    <HeaderMenuIcon />
+                    <Link href="/posts/create">
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        endIcon={<PostAdd />}
+                      >
+                        投稿
+                      </Button>
+                    </Link>
+                  </>
+                ) : (
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    className={classes.loginButton}
+                    onClick={signin}
+                  >
+                    ログイン
+                  </Button>
+                )}
+              </>
+            )}
+          </>
         </Toolbar>
       </AppBar>
       <div>{children}</div>
