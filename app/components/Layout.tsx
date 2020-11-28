@@ -4,15 +4,34 @@ import Link from 'next/link'
 import { HeaderMenuIcon } from './header/HeaderMenuIcon'
 import { AuthContext } from '../contexts/auth'
 
-import { AppBar, Button, Toolbar, Typography } from '@material-ui/core'
+import {
+  AppBar,
+  Button,
+  createStyles,
+  makeStyles,
+  Toolbar,
+  Typography,
+} from '@material-ui/core'
 import { PostAdd } from '@material-ui/icons'
 
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
+/** Styles */
+const useStyles = makeStyles(() =>
+  createStyles({
+    loginButton: {
+      marginLeft: 'auto',
+      marginRight: '20px',
+    },
+  })
+)
+
 /** Main */
 export const Layout: React.FC = ({ children }) => {
-  const { user } = useContext(AuthContext)
+  const classes = useStyles()
+
+  const { user, signin } = useContext(AuthContext)
 
   return (
     <div>
@@ -35,7 +54,14 @@ export const Layout: React.FC = ({ children }) => {
               </Link>
             </>
           ) : (
-            <div>Login</div>
+            <Button
+              variant="contained"
+              color="secondary"
+              className={classes.loginButton}
+              onClick={signin}
+            >
+              ログイン
+            </Button>
           )}
         </Toolbar>
       </AppBar>

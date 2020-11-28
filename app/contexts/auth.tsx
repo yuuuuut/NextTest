@@ -9,6 +9,7 @@ type AuthContextType = {
   user: User | null
   load: boolean
   notAuthenticated: boolean
+  signin: () => Promise<void>
   signout: () => Promise<void>
 }
 
@@ -17,6 +18,7 @@ const AuthContext = createContext<Partial<AuthContextType>>({
   user: null,
   load: false,
   notAuthenticated: false,
+  signin: undefined,
   signout: undefined,
 })
 
@@ -41,6 +43,20 @@ const AuthProvider: React.FC = ({ children }) => {
   const [user, setUser] = useState<User | null>(null)
   const [load, setLoad] = useState(true)
   const [notAuthenticated, setNotAuthenticated] = useState(false)
+
+  const signin = useCallback(async () => {
+    const provider = new firebase.auth.GoogleAuthProvider()
+
+    await firebase
+      .auth()
+      .signInWithPopup(provider)
+      .then((result) => {
+        setUser(result.user as User)
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+  }, [])
 
   const signout = useCallback(async () => {
     await firebase
@@ -93,7 +109,9 @@ const AuthProvider: React.FC = ({ children }) => {
   }, [])
 
   return (
-    <AuthContext.Provider value={{ user, load, notAuthenticated, signout }}>
+    <AuthContext.Provider
+      value={{ user, load, notAuthenticated, signin, signout }}
+    >
       {children}
     </AuthContext.Provider>
   )
