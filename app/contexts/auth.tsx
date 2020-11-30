@@ -1,5 +1,6 @@
 import React, { createContext, useCallback, useEffect, useState } from 'react'
 
+import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
 import { User } from '../models/User'
 import firebase from 'firebase/app'
@@ -8,7 +9,6 @@ import firebase from 'firebase/app'
 type AuthContextType = {
   user: User | null
   load: boolean
-  notAuthenticated: boolean
   signin: () => Promise<void>
   signout: () => Promise<void>
 }
@@ -17,7 +17,6 @@ type AuthContextType = {
 const AuthContext = createContext<Partial<AuthContextType>>({
   user: null,
   load: false,
-  notAuthenticated: false,
   signin: undefined,
   signout: undefined,
 })
@@ -40,9 +39,10 @@ async function createUser(user: User) {
 
 /** Main */
 const AuthProvider: React.FC = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null)
+  const router = useRouter()
+
+  const [user, setUser] = useState<User | null | undefined>(null)
   const [load, setLoad] = useState(true)
-  const [notAuthenticated, setNotAuthenticated] = useState(false)
 
   const signin = useCallback(async () => {
     const provider = new firebase.auth.GoogleAuthProvider()
@@ -63,6 +63,8 @@ const AuthProvider: React.FC = ({ children }) => {
       .auth()
       .signOut()
       .then(() => {
+        router.push('/')
+
         toast.success('ログアウトしました。', {
           position: 'bottom-left',
           autoClose: 3000,
@@ -80,7 +82,6 @@ const AuthProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     if (user !== null) {
-      setNotAuthenticated(false)
       setLoad(false)
       return
     }
@@ -98,10 +99,8 @@ const AuthProvider: React.FC = ({ children }) => {
         setUser(loginUser)
         createUser(loginUser)
 
-        setNotAuthenticated(false)
         setLoad(false)
       } else {
-        setNotAuthenticated(true)
         setUser(null)
         setLoad(false)
       }
@@ -109,9 +108,7 @@ const AuthProvider: React.FC = ({ children }) => {
   }, [])
 
   return (
-    <AuthContext.Provider
-      value={{ user, load, notAuthenticated, signin, signout }}
-    >
+    <AuthContext.Provider value={{ user, load, signin, signout }}>
       {children}
     </AuthContext.Provider>
   )
