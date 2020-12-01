@@ -1,11 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useContext } from 'react'
 
 import { createStyles, makeStyles } from '@material-ui/core'
-
-import { User } from '../../models/User'
-import { Post } from '../../models/Post'
+import { PostsContext } from '../../contexts/post'
 import { PostCard } from './PostCard'
-import firebase from 'firebase/app'
 
 /** Styles */
 const useStyles = makeStyles(() =>
@@ -34,63 +31,17 @@ const useStyles = makeStyles(() =>
 /** Main */
 export const PostList = () => {
   const classes = useStyles()
-
-  // State
-  const [posts, setPosts] = useState<Array<Post>>([])
-  const [load, setLoad] = useState(false)
-
-  /**
-   * PostにidとuserDataを追加してnewPosts[]にpushする
-   * @param snapshot
-   * @return {Array<Post>} Postの配列
-   */
-  const getNewPosts = async (snapshot: firebase.firestore.QuerySnapshot) => {
-    const newPosts: Array<Post> = []
-
-    await Promise.all(
-      snapshot.docs.map(async (doc) => {
-        const post = doc.data() as Post
-        post.id = doc.id
-
-        const user = await post.user.get()
-
-        post.userData = user.data() as User
-
-        newPosts.push(post)
-      })
-    )
-    return newPosts
-  }
-
-  useEffect(() => {
-    const loadPosts = async () => {
-      setLoad(true)
-      const snapshot = await firebase.firestore().collection('posts').get()
-
-      if (snapshot.empty) {
-        return
-      }
-
-      const newPosts = await getNewPosts(snapshot)
-
-      setPosts(newPosts)
-
-      setTimeout(() => {
-        setLoad(false)
-      }, 400)
-    }
-    loadPosts()
-  }, [])
+  const { load, posts } = useContext(PostsContext)
 
   return (
     <div className={classes.root}>
       <div className={classes.main}>
-        {posts.length > 0 && (
+        {posts && (
           <div className={classes.cardArea}>
             {posts.map((post) => (
               <div key={post.id} className={classes.card}>
                 <PostCard
-                  load={load}
+                  load={load as boolean}
                   id={post.id}
                   images={post.images}
                   path={post.images[0].path}

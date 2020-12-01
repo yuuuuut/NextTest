@@ -1,6 +1,8 @@
+import { useContext } from 'react'
+
 import { Button, Dialog, DialogActions, DialogTitle } from '@material-ui/core'
 
-import firebase from 'firebase/app'
+import { PostsContext } from '../../contexts/post'
 
 /** Types */
 type ConfirmationDeleteProps = {
@@ -14,11 +16,7 @@ export const ConfirmationDelete = (props: ConfirmationDeleteProps) => {
   const open = props.open
   const handleDialogClose = props.handleDialogClose
 
-  async function deletePost(id: string) {
-    handleDialogClose()
-
-    await firebase.firestore().collection('posts').doc(id).delete()
-  }
+  const { remove } = useContext(PostsContext)
 
   return (
     <Dialog
@@ -34,7 +32,11 @@ export const ConfirmationDelete = (props: ConfirmationDeleteProps) => {
         <Button onClick={handleDialogClose} color="primary">
           キャンセル
         </Button>
-        <Button onClick={() => deletePost(props.id)} color="primary" autoFocus>
+        <Button
+          onClick={() => remove && remove(props.id)}
+          color="primary"
+          autoFocus
+        >
           削除
         </Button>
       </DialogActions>
