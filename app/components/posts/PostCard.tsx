@@ -1,3 +1,5 @@
+import { useContext, useState } from 'react'
+
 import {
   Card,
   CardActions,
@@ -7,10 +9,12 @@ import {
   makeStyles,
   Typography,
 } from '@material-ui/core'
-
 import { Favorite, MoreVert } from '@material-ui/icons'
-import { PostCardMedia } from './PostCardMedia'
 import { Skeleton } from '@material-ui/lab'
+
+import { AuthContext } from '../../contexts/auth'
+import { PostCardMedia } from './PostCardMedia'
+import { PostCardMenu } from './PostCardMenu'
 import { Image } from '../../models/Post'
 import { AvatarKit } from '../UI/Avatar'
 
@@ -32,6 +36,7 @@ type PostCard = {
   images: Array<Image>
   path: string
   body: string
+  uid: string
   photoURL: string
   displayName: string
 }
@@ -40,7 +45,18 @@ type PostCard = {
 export const PostCard = (props: PostCard) => {
   const classes = useStyles()
 
+  const { user } = useContext(AuthContext)
   const load = props.load
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
 
   return (
     <Card className={classes.root}>
@@ -59,9 +75,24 @@ export const PostCard = (props: PostCard) => {
         }
         action={
           load ? null : (
-            <IconButton aria-label="settings">
-              <MoreVert />
-            </IconButton>
+            <>
+              {user?.uid === props.uid && (
+                <div>
+                  <IconButton
+                    aria-controls="simple-menu"
+                    aria-haspopup="true"
+                    onClick={handleClick}
+                  >
+                    <MoreVert />
+                  </IconButton>
+                  <PostCardMenu
+                    id={props.id}
+                    handleClose={handleClose}
+                    anchorEl={anchorEl}
+                  />
+                </div>
+              )}
+            </>
           )
         }
         title={

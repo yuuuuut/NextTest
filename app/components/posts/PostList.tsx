@@ -95,6 +95,7 @@ export const PostList = () => {
                   images={post.images}
                   path={post.images[0].path}
                   body={post.body}
+                  uid={post.userData.uid}
                   photoURL={post.userData.photoURL as string}
                   displayName={post.userData.displayName as string}
                 />
