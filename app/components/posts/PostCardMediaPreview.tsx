@@ -6,7 +6,9 @@ import {
   makeStyles,
   Theme,
 } from '@material-ui/core'
+
 import { ChevronLeft, ChevronRight, Close } from '@material-ui/icons'
+import { BackDropPostImage } from '../UI/BackDropPostImage'
 
 /** Style */
 const useStyles = makeStyles((theme: Theme) =>
@@ -15,11 +17,6 @@ const useStyles = makeStyles((theme: Theme) =>
       zIndex: theme.zIndex.drawer + 1,
       backgroundColor: 'rgba(0, 0, 0, 0.4)',
       color: '#fff',
-    },
-    backdropImage: {
-      width: '100%',
-      maxWidth: '100%',
-      height: 'auto',
     },
     iconButtonBg: {
       backgroundColor: '#777777',
@@ -59,9 +56,7 @@ export const PostCardMediaPreview = (props: PostCardMediaPreviewProps) => {
           <Close className={classes.white} fontSize="large" />
         </IconButton>
       </Box>
-      <div>
-        <img src={currentImage} className={classes.backdropImage} />
-      </div>
+      <BackDropPostImage path={currentImage} />
       <Box position="absolute" top={325} right={20}>
         {currentIndex !== imgLength - 1 && (
           <div onClick={() => props.add(currentIndex)}>
