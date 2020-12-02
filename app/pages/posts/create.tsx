@@ -5,7 +5,6 @@ import { LinearProgress, makeStyles } from '@material-ui/core'
 import { PostFormBodyInput } from '../../components/posts/PostFormBodyInput'
 import { PostFormButton } from '../../components/posts/PostFormButton'
 import { PostFormImage } from '../../components/posts/PostFormImage'
-
 import { Image, PreviewImage } from '../../models/Post'
 import { toast } from 'react-toastify'
 import firebase from 'firebase/app'
@@ -70,6 +69,7 @@ const Create = () => {
         .doc(currentUserUid)
 
       await firebase.firestore().collection('posts').add({
+        userId: currentUserUid,
         user: userRef,
         images: images,
         body,

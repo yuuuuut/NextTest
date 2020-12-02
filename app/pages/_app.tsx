@@ -3,7 +3,6 @@ import React, { useEffect } from 'react'
 import { ThemeProvider } from '@material-ui/core'
 
 import { AuthRequired } from '../contexts/AuthRequired'
-import { PostsProvider } from '../contexts/post'
 import { AuthProvider } from '../contexts/auth'
 import theme from '../components/theme'
 import '../lib/firebase'
@@ -29,9 +28,7 @@ const MyApp = ({ Component, pageProps }: any) => {
   ) : (
     <ThemeProvider theme={theme}>
       <AuthProvider>
-        <PostsProvider>
-          <Component {...pageProps} />
-        </PostsProvider>
+        <Component {...pageProps} />
       </AuthProvider>
     </ThemeProvider>
   )

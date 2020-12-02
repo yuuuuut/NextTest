@@ -1,8 +1,4 @@
-import { useContext } from 'react'
-
 import { Button, Dialog, DialogActions, DialogTitle } from '@material-ui/core'
-
-import { PostsContext } from '../../contexts/post'
 
 /** Types */
 type ConfirmationDeleteProps = {
@@ -15,8 +11,6 @@ type ConfirmationDeleteProps = {
 export const ConfirmationDelete = (props: ConfirmationDeleteProps) => {
   const open = props.open
   const handleDialogClose = props.handleDialogClose
-
-  const { remove } = useContext(PostsContext)
 
   return (
     <Dialog
@@ -32,11 +26,7 @@ export const ConfirmationDelete = (props: ConfirmationDeleteProps) => {
         <Button onClick={handleDialogClose} color="primary">
           キャンセル
         </Button>
-        <Button
-          onClick={() => remove && remove(props.id)}
-          color="primary"
-          autoFocus
-        >
+        <Button onClick={handleDialogClose} color="primary" autoFocus>
           削除
         </Button>
       </DialogActions>
