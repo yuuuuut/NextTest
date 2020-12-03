@@ -17,6 +17,7 @@ import { PostCardMedia } from './PostCardMedia'
 import { PostCardMenu } from './PostCardMenu'
 import { Image } from '../../models/Post'
 import { AvatarKit } from '../UI/Avatar'
+import dayjs from 'dayjs'
 
 /** Style */
 const useStyles = makeStyles({
@@ -39,6 +40,7 @@ type PostCard = {
   uid: string
   photoURL: string
   displayName: string
+  createdAt: firebase.default.firestore.Timestamp
 }
 
 /** Main */
@@ -107,7 +109,20 @@ export const PostCard = (props: PostCard) => {
             <div>{props.displayName}</div>
           )
         }
-        subheader="September 14, 2016"
+        subheader={
+          load ? (
+            <Skeleton
+              animation="wave"
+              height={18}
+              width="60%"
+              style={{ marginBottom: 5 }}
+            />
+          ) : (
+            <div>
+              {dayjs(props.createdAt.toDate()).format('YYYY/MM/DD HH:mm')}
+            </div>
+          )
+        }
       />
       {load ? (
         <Skeleton

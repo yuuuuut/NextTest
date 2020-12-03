@@ -5,7 +5,11 @@ import { ThemeProvider } from '@material-ui/core'
 import { AuthRequired } from '../contexts/AuthRequired'
 import { AuthProvider } from '../contexts/auth'
 import theme from '../components/theme'
+import dayjs from 'dayjs'
 import '../lib/firebase'
+import 'dayjs/locale/ja'
+
+dayjs.locale('ja')
 
 /** Main */
 const MyApp = ({ Component, pageProps }: any) => {

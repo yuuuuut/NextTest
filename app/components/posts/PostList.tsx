@@ -15,7 +15,6 @@ const useStyles = makeStyles(() =>
     },
     main: {
       width: '100%',
-      backgroundColor: 'ghostwhite',
     },
     cardArea: {
       display: 'flex',
@@ -36,7 +35,7 @@ export const PostList = () => {
   const classes = useStyles()
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
-  const [load, setLoad] = useState(false)
+  const [load, setLoad] = useState(true)
   const [posts, setPosts] = useState<Array<Post>>([])
   const [isPaginationFinished, setIsPaginationFinished] = useState(false)
 
@@ -46,7 +45,7 @@ export const PostList = () => {
       .firestore()
       .collection('posts')
       .orderBy('createdAt', 'desc')
-      .limit(6)
+      .limit(8)
   }
 
   function onScroll() {
@@ -70,13 +69,11 @@ export const PostList = () => {
   /** useEffect */
 
   useEffect(() => {
-    setLoad(true)
-
     loadPosts(Query(), setIsPaginationFinished, setPosts, posts)
 
     setTimeout(() => {
       setLoad(false)
-    }, 300)
+    }, 500)
   }, [])
 
   useEffect(() => {
@@ -103,6 +100,7 @@ export const PostList = () => {
                   uid={post.userData.uid}
                   photoURL={post.userData.photoURL as string}
                   displayName={post.userData.displayName as string}
+                  createdAt={post.createdAt}
                 />
               </div>
             ))}

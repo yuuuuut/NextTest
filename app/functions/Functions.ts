@@ -1,18 +1,17 @@
-import firebase from 'firebase/app'
 import { Post } from '../models/Post'
 import { User } from '../models/User'
+import firebase from 'firebase/app'
 
 /**
- *
+ * snapshotをmapしてpostに必要な情報を追加し、
+ * 新しい配列を既存のpostsにconcatする
  */
 async function appendPosts(
   snapshot: firebase.firestore.QuerySnapshot<firebase.firestore.DocumentData>,
   setFunction: any,
   posts: Array<Post>
 ) {
-  const gotPosts: Array<Post> = []
-
-  await Promise.all(
+  const gotPosts: Array<Post> = await Promise.all(
     snapshot.docs.map(async (doc) => {
       const post = doc.data() as Post
       post.id = doc.id
@@ -21,14 +20,15 @@ async function appendPosts(
 
       post.userData = user.data() as User
 
-      gotPosts.push(post)
+      return post
     })
   )
   setFunction(posts.concat(gotPosts))
 }
 
 /**
- *
+ * queryをgetして、存在しなかったら終了。
+ * 存在した場合はappendPosts
  */
 export async function loadPosts(
   query: firebase.firestore.Query<firebase.firestore.DocumentData>,
@@ -47,7 +47,8 @@ export async function loadPosts(
 }
 
 /**
- *
+ * postsが存在する場合、startAfterで次のPost群を取得し、
+ * appendPostsする。
  */
 export async function loadNextPosts(
   query: firebase.firestore.Query<firebase.firestore.DocumentData>,
