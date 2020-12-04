@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react'
+import Link from 'next/link'
 
 import {
   Card,
@@ -28,6 +29,9 @@ const useStyles = makeStyles({
     width: 300,
     height: 172,
   },
+  displayNameColor: {
+    color: 'black',
+  },
 })
 
 /** Types */
@@ -47,8 +51,8 @@ type PostCard = {
 export const PostCard = (props: PostCard) => {
   const classes = useStyles()
 
-  const { user } = useContext(AuthContext)
   const load = props.load
+  const { user } = useContext(AuthContext)
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
@@ -72,7 +76,11 @@ export const PostCard = (props: PostCard) => {
               height={40}
             />
           ) : (
-            <AvatarKit src={props.photoURL} />
+            <Link href={`/users/${props.uid}`}>
+              <a className={classes.displayNameColor}>
+                <AvatarKit src={props.photoURL} />
+              </a>
+            </Link>
           )
         }
         action={
@@ -106,7 +114,9 @@ export const PostCard = (props: PostCard) => {
               style={{ marginBottom: 5 }}
             />
           ) : (
-            <div>{props.displayName}</div>
+            <Link href={`/users/${props.uid}`}>
+              <a className={classes.displayNameColor}>{props.displayName}</a>
+            </Link>
           )
         }
         subheader={

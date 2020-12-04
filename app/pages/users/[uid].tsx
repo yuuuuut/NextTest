@@ -2,9 +2,10 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
 import Error from 'next/error'
 
-import { UserShowHeader } from '../../components/users/UserShowHeader'
-//import { loadNextPosts, loadPosts } from '../../functions/Functions'
 import { createStyles, makeStyles } from '@material-ui/core'
+
+import { UserShowHeader } from '../../components/users/UserShowHeader'
+import { loadNextPosts, loadPosts } from '../../functions/Functions'
 import { PostCard } from '../../components/posts/PostCard'
 import { Layout } from '../../components/Layout'
 import { User } from '../../models/User'
@@ -44,18 +45,41 @@ const UserShow = () => {
   const classes = useStyles()
   const router = useRouter()
   const queryUid = router.query as Query
+  const memo = useMemo(() => ({ uid: '' }), [])
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
-  const [user, setUser] = useState<User | null>(null)
   const [load, setLoad] = useState(true)
   const [error, setError] = useState(false)
-  //const [q, setQ] = useState('')
-  const [postLoad, setPostLoad] = useState(false)
+  const [postLoad, setPostLoad] = useState(true)
+  const [user, setUser] = useState<User | null>(null)
   const [posts, setPosts] = useState<Array<Post>>([])
   const [isPaginationFinished, setIsPaginationFinished] = useState(false)
+  const [query, setQuery] = useState<
+    firebase.firestore.Query<firebase.firestore.DocumentData>
+  >()
 
+  /**
+   * memoに現在表示しているuserのuidを取得しsetする。
+   * もし一致しなければPostsとPaginationFinishedを
+   * リセットする。
+   */
+  function changeUser() {
+    if (queryUid.uid !== memo.uid) {
+      setLoad(true)
+      setPostLoad(true)
+      setIsPaginationFinished(false)
+      setPosts([])
+    }
+
+    memo.uid = queryUid.uid
+  }
+  changeUser()
+
+  /**
+   *
+   */
   function onScroll() {
-    if (isPaginationFinished) {
+    if (isPaginationFinished || query === undefined) {
       return
     }
 
@@ -69,18 +93,63 @@ const UserShow = () => {
       return
     }
 
-    //loadNextPosts(q, setIsPaginationFinished, setPosts, posts)
+    loadNextPosts(query, setIsPaginationFinished, setPosts, posts)
   }
 
-  const memo = useMemo(() => ({ props: '' }), [])
+  /**
+   *
+   */
+  async function getUser() {
+    if (queryUid.uid === undefined) {
+      return
+    }
+
+    const doc = await firebase
+      .firestore()
+      .collection('users')
+      .doc(queryUid.uid)
+      .get()
+
+    if (!doc.exists) {
+      setError(true)
+      return
+    }
+
+    const gotUser = doc.data() as User
+    gotUser.uid = doc.id
+    setUser(gotUser)
+  }
+
+  /**
+   *
+   */
+  async function getUserPosts() {
+    if (queryUid.uid === undefined) {
+      return
+    }
+
+    const query = await firebase
+      .firestore()
+      .collection('posts')
+      .where('userId', '==', queryUid.uid)
+      .orderBy('createdAt', 'desc')
+      .limit(6)
+
+    setQuery(query)
+
+    loadPosts(query, setIsPaginationFinished, setPosts, posts)
+  }
+
   /** useEffect */
+  useEffect(() => {
+    getUser()
+    getUserPosts()
 
-  if (queryUid.uid !== memo.props) {
-    setIsPaginationFinished(false)
-    setPosts([])
-  }
-
-  memo.props = queryUid.uid
+    setTimeout(() => {
+      setPostLoad(false)
+      setLoad(false)
+    }, 500)
+  }, [queryUid.uid])
 
   useEffect(() => {
     window.addEventListener('scroll', onScroll)
@@ -89,50 +158,6 @@ const UserShow = () => {
       window.removeEventListener('scroll', onScroll)
     }
   }, [posts, scrollContainerRef.current, isPaginationFinished])
-
-  useEffect(() => {
-    async function getUser() {
-      if (queryUid.uid === undefined) {
-        return
-      }
-
-      //setQ(queryUid.uid)
-
-      const doc = await firebase
-        .firestore()
-        .collection('users')
-        .doc(queryUid.uid)
-        .get()
-
-      if (!doc.exists) {
-        setError(true)
-        return
-      }
-
-      const gotUser = doc.data() as User
-      gotUser.uid = doc.id
-      setUser(gotUser)
-
-      /*
-      const q = await firebase
-        .firestore()
-        .collection('posts')
-        .where('userId', '==', queryUid.uid)
-        .orderBy('createdAt', 'desc')
-        .limit(6)
-        */
-
-      //setQ(q)
-
-      //loadPosts(q, setIsPaginationFinished, setPosts, posts)
-
-      setTimeout(() => {
-        setPostLoad(false)
-        setLoad(false)
-      }, 100)
-    }
-    getUser()
-  }, [queryUid.uid])
 
   return (
     <div>

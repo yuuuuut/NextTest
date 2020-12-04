@@ -1,9 +1,6 @@
 import React, { useContext } from 'react'
 import Link from 'next/link'
 
-import { HeaderMenuIcon } from './header/HeaderMenuIcon'
-import { AuthContext } from '../contexts/auth'
-
 import {
   AppBar,
   Button,
@@ -14,6 +11,8 @@ import {
 } from '@material-ui/core'
 import { PostAdd } from '@material-ui/icons'
 
+import { HeaderMenuIcon } from './header/HeaderMenuIcon'
+import { AuthContext } from '../contexts/auth'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -23,6 +22,9 @@ const useStyles = makeStyles(() =>
     loginButton: {
       marginLeft: 'auto',
       marginRight: '20px',
+    },
+    logoColor: {
+      color: 'white',
     },
   })
 )
@@ -38,7 +40,9 @@ export const Layout: React.FC = ({ children }) => {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6">
-            <Link href="/">Photos</Link>
+            <Link href="/">
+              <a className={classes.logoColor}>Photos</a>
+            </Link>
           </Typography>
           <>
             {load ? (
@@ -83,12 +87,6 @@ export const Layout: React.FC = ({ children }) => {
 
         a {
           text-decoration: none;
-        }
-
-        a:link,
-        a:visited,
-        a:active {
-          color: white;
         }
       `}</style>
     </div>
