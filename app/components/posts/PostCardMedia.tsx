@@ -1,7 +1,9 @@
 import {
   Backdrop,
+  Box,
   CardMedia,
   createStyles,
+  IconButton,
   makeStyles,
   Theme,
 } from '@material-ui/core'
@@ -10,6 +12,7 @@ import { BackDropPostImage } from '../UI/BackDropPostImage'
 import { PostCardMediaChild } from './PostCardMediaChild'
 import { Image } from '../../models/Post'
 import { useState } from 'react'
+import { Close } from '@material-ui/icons'
 
 /** Style */
 const useStyles = makeStyles((theme: Theme) =>
@@ -30,6 +33,14 @@ const useStyles = makeStyles((theme: Theme) =>
       zIndex: theme.zIndex.drawer + 1,
       backgroundColor: 'rgba(0, 0, 0, 0.4)',
       color: '#fff',
+    },
+    iconButtonBg: {
+      backgroundColor: '#777777',
+      opacity: 0.9,
+      pointerEvents: 'none',
+    },
+    white: {
+      color: 'white',
     },
   })
 )
@@ -74,6 +85,16 @@ export const PostCardMedia = (props: PostCardMediaProps) => {
                 open={open}
                 onClick={handleClose}
               >
+                <Box
+                  position="absolute"
+                  top={20}
+                  right={30}
+                  onClick={handleClose}
+                >
+                  <IconButton className={classes.iconButtonBg}>
+                    <Close className={classes.white} fontSize="large" />
+                  </IconButton>
+                </Box>
                 <BackDropPostImage path={images[0].path} />
               </Backdrop>
             </>

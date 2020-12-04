@@ -73,7 +73,7 @@ export const PostList = () => {
 
     setTimeout(() => {
       setLoad(false)
-    }, 500)
+    }, 1000)
   }, [])
 
   useEffect(() => {

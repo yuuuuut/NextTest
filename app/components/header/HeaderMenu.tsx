@@ -69,7 +69,7 @@ export const HeaderMenu = (props: MenuKitProps) => {
       open={Boolean(props.anchorEl)}
       onClose={props.handleClose}
     >
-      <LinkMenuItem href={`/users/${props.uid}`}>
+      <LinkMenuItem href={`/users/${props.uid}`} onClick={props.handleClose}>
         <ListItemIcon>
           <AccountCircle fontSize="default" />
         </ListItemIcon>
