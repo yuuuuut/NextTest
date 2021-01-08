@@ -58,33 +58,43 @@ export const PostFormImage = (props: PostFormImageProps) => {
    */
   const upload = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
-      //fileName作成
-      const S = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-      const N = 16
-      const fileName = Array.from(crypto.getRandomValues(new Uint32Array(N)))
-        .map((n) => S[n % S.length])
-        .join('')
-
       if (e.target.files) {
-        const file = e.target.files[0]
-        const blob = (await resizeFile(file)) as Blob
+        const files = Array.from(e.target.files)
 
-        const reader = new FileReader()
+        if (files.length > 4) {
+          console.error('4枚のみ')
+          return
+        }
 
-        if (file) {
-          reader.onload = () => {
-            const previewImage = {
-              id: fileName,
-              path: reader.result,
-              blob: blob,
+        for (const file of files) {
+          //fileName作成
+          const S =
+            'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+          const N = 16
+          const fileName = Array.from(
+            crypto.getRandomValues(new Uint32Array(N))
+          )
+            .map((n) => S[n % S.length])
+            .join('')
+
+          const blob = (await resizeFile(file)) as Blob
+          const reader = new FileReader()
+
+          if (file) {
+            reader.onload = () => {
+              const previewImage = {
+                id: fileName,
+                path: reader.result,
+                blob: blob,
+              }
+
+              props.setPreviewImages((prevState: Array<PreviewImage>) => [
+                ...prevState,
+                previewImage,
+              ])
             }
-
-            props.setPreviewImages((prevState: Array<PreviewImage>) => [
-              ...prevState,
-              previewImage,
-            ])
+            reader.readAsDataURL(blob)
           }
-          reader.readAsDataURL(blob)
         }
       }
     },
@@ -114,6 +124,7 @@ export const PostFormImage = (props: PostFormImageProps) => {
             type="file"
             onChange={(e) => upload(e)}
             data-testid="input"
+            multiple
           />
           <label htmlFor="icon-button-file">
             <Chip
